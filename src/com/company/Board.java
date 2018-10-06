@@ -1,6 +1,8 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 public class Board{
 
@@ -10,7 +12,7 @@ public class Board{
 
     /**
      * Construct a Board object in order to store and solve the array of Cell objects
-     * @param puzzle containing an array of cell objects
+     * @param puzzle int[][] puzzle array; [row][column]; zero equals blank
      */
     public Board(int[][] puzzle) {
         this.puzzleNums = puzzle;
@@ -64,8 +66,37 @@ public class Board{
     }
 
 
+    /**
+     *
+     * @param cells
+     */
     public void solve(ArrayList<Cell> cells) {
+        for(Cell cell : cells){
 
+        }
+    }
+
+
+    private int[] getRowOptionsHoriz(int rowNum){
+
+    }
+
+    private int[] getRowOptionsVert(int rowNum){
+
+    }
+
+    private int[] getGridOptions(int gridNum){
+
+    }
+
+
+    private int[] crossExcludeNums(int[] arr1, int[] arr2){
+
+        int[] newArray = new int[(arr1.length + arr2.length)];
+        for (int i = 0; i < newArray.length; i++) {
+            newArray[i] = arr1[i];
+        }
+        int[] unique = new HashSet<Integer>(Arrays.asList(array)).toArray(new String[0]);
     }
 }
 
