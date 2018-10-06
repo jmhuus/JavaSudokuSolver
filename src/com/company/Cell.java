@@ -2,13 +2,16 @@ package com.company;
 
 import java.util.ArrayList;
 
-public class Square {
+public class Cell {
 
     ArrayList<Integer> options;
+    int posx, posy;
 
 
-    public Square(ArrayList<Integer> options) {
+    public Cell(ArrayList<Integer> options, int posx, int posy) {
         this.options = options;
+        this.posx = posx;
+        this.posy = posy;
     }
 
 
