@@ -16,7 +16,9 @@ public class Main {
                 {1,5,0,0,0,2,0,0,9},
         };
         Board board = new Board(boardNums);
-        System.out.println(board.toString());
+
+
+        board.solve();
     }
 }
 

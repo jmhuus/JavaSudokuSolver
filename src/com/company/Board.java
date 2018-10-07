@@ -1,7 +1,10 @@
 package com.company;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Board{
@@ -19,8 +22,8 @@ public class Board{
 
         // Init empty cells
         cells = new ArrayList<>();
-        for(int row=1; row<=9; row++){
-            for(int col=1; col<=9; col++) {
+        for(int row=0; row<9; row++){
+            for(int col=0; col<9; col++) {
 
 
                 // Init each cell options
@@ -68,38 +71,98 @@ public class Board{
 
     /**
      *
-     * @param cells
      */
-    public void solve(ArrayList<Cell> cells) {
-        for(Cell cell : cells){
-
-        }
+    public void solve() {
+        System.out.println(getGridIndex(1,4));
     }
 
 
-    private int[] getRowOptionsHoriz(int rowNum){
-
+    private int[] getRowOptions(int rowNum){
+        return new int[]{1};
     }
 
-    private int[] getRowOptionsVert(int rowNum){
-
+    private int[] getColOptions(int colNum){
+        return new int[]{1};
     }
 
+
+    /**
+     *
+     * @param gridNum
+     *          Top left:   0
+     *          Top left:   1
+     *          Top Center: 2
+     *          Top Center: 3
+     *          Top Center: 4
+     *          Top Center: 5
+     *          Top Center: 6
+     *          Top Center: 7
+     *          Top Center: 8
+     *          Top Center: 9
+     * @return
+     *          Array of available numbers in the grid
+     */
     private int[] getGridOptions(int gridNum){
+        return new int[]{1};
+    }
 
+    private int[] getNumOptions(int rowNum, int colNum){
+
+
+
+        int[] rowOptions = getRowOptions(rowNum);
+        int[] colOptions = getColOptions(colNum);
+        int[] gridOptions = getGridOptions(getGridIndex(rowNum, colNum));
+
+        // Concat all three arrays
+        int[] uniqueNumOptions = ArrayUtils.addAll(rowOptions, colOptions);
+        uniqueNumOptions = ArrayUtils.addAll(uniqueNumOptions, gridOptions);
+
+        return uniqueNumOptions;
     }
 
 
-    private int[] crossExcludeNums(int[] arr1, int[] arr2){
+    /**
+     * The Sudoku board is comprised of cells and grids
+     * @param rowNum contains the relevant cell's location row number
+     * @param colNum contains the relevant cell's location column number
+     * @return the grid index number. There are 9 grids, each containing a 3x3 group of cells.
+     *      1 2 3
+     *      4 5 6
+     *      7 8 9
+     */
+    private int getGridIndex(int rowNum, int colNum){
+        // Key=[rowNum range][colNum range]     Value = Grid Index
+        HashMap<Integer[][], Integer> gridMapping = new HashMap<>();
+        gridMapping.put(new Integer[][]{{1,3},{1,3}}, 1);
+        gridMapping.put(new Integer[][]{{1,3},{4,6}}, 2);
+        gridMapping.put(new Integer[][]{{1,3},{7,9}}, 3);
+        gridMapping.put(new Integer[][]{{4,6},{1,3}}, 4);
+        gridMapping.put(new Integer[][]{{4,6},{4,6}}, 5);
+        gridMapping.put(new Integer[][]{{4,6},{7,9}}, 6);
+        gridMapping.put(new Integer[][]{{7,9},{1,3}}, 7);
+        gridMapping.put(new Integer[][]{{7,9},{4,6}}, 8);
+        gridMapping.put(new Integer[][]{{7,9},{7,9}}, 9);
 
-        int[] newArray = new int[(arr1.length + arr2.length)];
-        for (int i = 0; i < newArray.length; i++) {
-            newArray[i] = arr1[i];
+        // Retrieve the relevant grid index
+        for (HashMap.Entry<Integer[][], Integer> entry : gridMapping.entrySet()) {
+            Integer[][] rowColPairs = entry.getKey();
+            Integer gridIndex = entry.getValue();
+            int mapRowNumMin = rowColPairs[0][0];
+            int mapRowNumMax = rowColPairs[0][1];
+            int mapColNumMin = rowColPairs[1][0];
+            int mapColNumMax = rowColPairs[1][1];
+
+            // Row and column numbers
+            if(mapRowNumMin <= rowNum && rowNum <= mapRowNumMax
+                    && mapColNumMin <= colNum && colNum <= mapColNumMax){
+                return gridIndex;
+            }
         }
-        int[] unique = new HashSet<Integer>(Arrays.asList(array)).toArray(new String[0]);
+
+        return 0;
     }
 }
-
 
 
 
