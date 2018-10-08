@@ -1,5 +1,8 @@
 package com.company;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -16,8 +19,6 @@ public class Main {
                 {1,5,0,0,0,2,0,0,9},
         };
         Board board = new Board(boardNums);
-
-
         board.solve();
     }
 }

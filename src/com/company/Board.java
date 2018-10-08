@@ -1,7 +1,11 @@
 package com.company;
 
 import org.apache.commons.lang3.ArrayUtils;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 public class Board{
 
@@ -46,6 +50,7 @@ public class Board{
         }
     }
 
+
     /**
      * Print the Sudoku board
      * @return string representation of the Sudoku board
@@ -65,11 +70,8 @@ public class Board{
     }
 
 
-    /**
-     *
-     */
     public void solve() {
-        System.out.println(getGridIndex(1,4));
+        System.out.println(Arrays.toString(getNumOptions(1,9)));
     }
 
 
@@ -78,15 +80,19 @@ public class Board{
         Integer[] rowNums = puzzleNums[rowNum];
 
         // Remove blanks(zeros)
-        List<Integer> existingRowNums = Arrays.asList(rowNums);
+        List<Integer> existingRowNums = new ArrayList<Integer>(Arrays.asList(rowNums));
         for(int i=0; i<existingRowNums.size(); i++){
             if(existingRowNums.get(i) == 0){
                 existingRowNums.remove(i);
             }
         }
 
-        return (Integer[]) existingRowNums.toArray();
+        Integer[] finalArray = new Integer[existingRowNums.size()];
+        finalArray = (Integer[]) existingRowNums.toArray();
+
+        return finalArray;
     }
+
 
     private Integer[] getColOptions(int colNum){
         return new Integer[]{1};
@@ -94,15 +100,20 @@ public class Board{
 
 
     /**
-     *
-     * @param gridNum
-     * @return
-     *          Array of available numbers in the grid
+     * @param gridNum Number index referencing a 3x3 group of cells
+     * @return Array of available numbers in the grid
      */
     private Integer[] getGridOptions(int gridNum){
         return new Integer[]{1};
     }
 
+
+    /**
+     * Use various methods to retrieve available row, column and grid number options
+     * @param rowNum
+     * @param colNum
+     * @return
+     */
     private Integer[] getNumOptions(int rowNum, int colNum){
 
         Integer[] rowOptions = getRowOptions(rowNum);
@@ -110,10 +121,14 @@ public class Board{
         Integer[] gridOptions = getGridOptions(getGridIndex(rowNum, colNum));
 
         // Concat all three arrays
-        Integer[] uniqueNumOptions = ArrayUtils.addAll(rowOptions, colOptions);
-        uniqueNumOptions = ArrayUtils.addAll(uniqueNumOptions, gridOptions);
+        Integer[] allNumOptions = ArrayUtils.addAll(rowOptions, colOptions);
+        allNumOptions = ArrayUtils.addAll(allNumOptions, gridOptions);
 
-        return uniqueNumOptions;
+
+        // Retrieve unique numbers
+        HashSet<Integer> uniqueNumOptions = new HashSet<>(Arrays.asList(allNumOptions));
+
+        return (Integer[]) uniqueNumOptions.toArray();
     }
 
 
