@@ -1,12 +1,11 @@
 package com.company;
 
 import org.apache.commons.lang3.ArrayUtils;
-
 import java.util.*;
 
 public class Board{
 
-    private int[][] puzzleNums;
+    private Integer[][] puzzleNums;
     private ArrayList<Cell> cells;
 
 
@@ -14,7 +13,7 @@ public class Board{
      * Construct a Board object in order to store and solve the array of Cell objects
      * @param puzzle int[][] puzzle array; [row][column]; zero equals blank
      */
-    public Board(int[][] puzzle) {
+    public Board(Integer[][] puzzle) {
         this.puzzleNums = puzzle;
 
         // Init empty cells
@@ -74,63 +73,44 @@ public class Board{
     }
 
 
-    private int[] getRowOptions(int rowNum){
+    private Integer[] getRowOptions(int rowNum){
         // Retrieve row array
-        int[] rowNums = puzzleNums[rowNum];
-
-        // Convert primitive to object array
-        Integer[] rowNumsObj = new Integer[rowNums.length];
-        for(int i=0; i<rowNums.length; i++){
-            rowNumsObj[i] = rowNums[i];
-        }
+        Integer[] rowNums = puzzleNums[rowNum];
 
         // Remove blanks(zeros)
-        List<Integer> existingRowNums = Arrays.asList(rowNumsObj);
+        List<Integer> existingRowNums = Arrays.asList(rowNums);
         for(int i=0; i<existingRowNums.size(); i++){
             if(existingRowNums.get(i) == 0){
                 existingRowNums.remove(i);
             }
         }
 
-        // Convert Object array back to primitive array
-        for(int i=0; i+)
-
-        return existingRowNums.toArray();
+        return (Integer[]) existingRowNums.toArray();
     }
 
-    private int[] getColOptions(int colNum){
-        return new int[]{1};
+    private Integer[] getColOptions(int colNum){
+        return new Integer[]{1};
     }
 
 
     /**
      *
      * @param gridNum
-     *          Top left:   0
-     *          Top left:   1
-     *          Top Center: 2
-     *          Top Center: 3
-     *          Top Center: 4
-     *          Top Center: 5
-     *          Top Center: 6
-     *          Top Center: 7
-     *          Top Center: 8
-     *          Top Center: 9
      * @return
      *          Array of available numbers in the grid
      */
-    private int[] getGridOptions(int gridNum){
-        return new int[]{1};
+    private Integer[] getGridOptions(int gridNum){
+        return new Integer[]{1};
     }
 
-    private int[] getNumOptions(int rowNum, int colNum){
+    private Integer[] getNumOptions(int rowNum, int colNum){
 
-        int[] rowOptions = getRowOptions(rowNum);
-        int[] colOptions = getColOptions(colNum);
-        int[] gridOptions = getGridOptions(getGridIndex(rowNum, colNum));
+        Integer[] rowOptions = getRowOptions(rowNum);
+        Integer[] colOptions = getColOptions(colNum);
+        Integer[] gridOptions = getGridOptions(getGridIndex(rowNum, colNum));
 
         // Concat all three arrays
-        int[] uniqueNumOptions = ArrayUtils.addAll(rowOptions, colOptions);
+        Integer[] uniqueNumOptions = ArrayUtils.addAll(rowOptions, colOptions);
         uniqueNumOptions = ArrayUtils.addAll(uniqueNumOptions, gridOptions);
 
         return uniqueNumOptions;

@@ -4,7 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
         // [row][column]
-        int[][] boardNums = {
+        Integer[][] boardNums = {
                 {5,0,0,9,0,0,0,2,7},
                 {0,0,0,5,0,0,1,0,4},
                 {0,0,7,1,2,3,0,0,8},
