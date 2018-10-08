@@ -2,10 +2,7 @@ package com.company;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class Board{
 
@@ -78,7 +75,27 @@ public class Board{
 
 
     private int[] getRowOptions(int rowNum){
-        return new int[]{1};
+        // Retrieve row array
+        int[] rowNums = puzzleNums[rowNum];
+
+        // Convert primitive to object array
+        Integer[] rowNumsObj = new Integer[rowNums.length];
+        for(int i=0; i<rowNums.length; i++){
+            rowNumsObj[i] = rowNums[i];
+        }
+
+        // Remove blanks(zeros)
+        List<Integer> existingRowNums = Arrays.asList(rowNumsObj);
+        for(int i=0; i<existingRowNums.size(); i++){
+            if(existingRowNums.get(i) == 0){
+                existingRowNums.remove(i);
+            }
+        }
+
+        // Convert Object array back to primitive array
+        for(int i=0; i+)
+
+        return existingRowNums.toArray();
     }
 
     private int[] getColOptions(int colNum){
@@ -107,8 +124,6 @@ public class Board{
     }
 
     private int[] getNumOptions(int rowNum, int colNum){
-
-
 
         int[] rowOptions = getRowOptions(rowNum);
         int[] colOptions = getColOptions(colNum);
