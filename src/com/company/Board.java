@@ -147,12 +147,11 @@ public class Board{
      */
     private int getGridIndex(int rowNum, int colNum){
         // Retrieve a mapping of each grid and it's contained cell locations
-        HashMap<Integer[][], Integer> gridMap = getGridHashMap();
+        HashMap<Integer, Integer[][]> gridMap = getGridHashMap();
 
-        // Retrieve the relevant grid index
-        for (HashMap.Entry<Integer[][], Integer> entry : gridMap.entrySet()) {
-            Integer[][] rowColPairs = entry.getKey();
-            Integer gridIndex = entry.getValue();
+        // Use rowNum, colNum to find the gridIndex
+        for (Integer gridIndex : gridMap.keySet()) {
+            Integer[][] rowColPairs = gridMap.get(gridIndex);
             int mapRowNumMin = rowColPairs[0][0];
             int mapRowNumMax = rowColPairs[0][1];
             int mapColNumMin = rowColPairs[1][0];
@@ -168,18 +167,18 @@ public class Board{
         return 0;
     }
 
-    private HashMap<Integer[][], Integer> getGridHashMap(){
+    private HashMap<Integer, Integer[][]> getGridHashMap(){
         // Key=[rowNum range][colNum range]     Value = Grid Index
-        HashMap<Integer[][], Integer> gridMap = new HashMap<>();
-        gridMap.put(new Integer[][]{{1,3},{1,3}}, 1);
-        gridMap.put(new Integer[][]{{1,3},{4,6}}, 2);
-        gridMap.put(new Integer[][]{{1,3},{7,9}}, 3);
-        gridMap.put(new Integer[][]{{4,6},{1,3}}, 4);
-        gridMap.put(new Integer[][]{{4,6},{4,6}}, 5);
-        gridMap.put(new Integer[][]{{4,6},{7,9}}, 6);
-        gridMap.put(new Integer[][]{{7,9},{1,3}}, 7);
-        gridMap.put(new Integer[][]{{7,9},{4,6}}, 8);
-        gridMap.put(new Integer[][]{{7,9},{7,9}}, 9);
+        HashMap<Integer, Integer[][]> gridMap = new HashMap<>();
+        gridMap.put(1, new Integer[][]{{1,3},{1,3}});
+        gridMap.put(2, new Integer[][]{{1,3},{4,6}});
+        gridMap.put(3, new Integer[][]{{1,3},{7,9}});
+        gridMap.put(4, new Integer[][]{{4,6},{1,3}});
+        gridMap.put(5, new Integer[][]{{4,6},{4,6}});
+        gridMap.put(6, new Integer[][]{{4,6},{7,9}});
+        gridMap.put(7, new Integer[][]{{7,9},{1,3}});
+        gridMap.put(8, new Integer[][]{{7,9},{4,6}});
+        gridMap.put(9, new Integer[][]{{7,9},{7,9}});
 
         return gridMap;
     }
