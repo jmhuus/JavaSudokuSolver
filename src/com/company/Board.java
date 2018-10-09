@@ -87,6 +87,8 @@ public class Board{
             }
         }
 
+
+        // TODO: return numbers that don't already exist, not numbers that do
         Integer[] finalArray = new Integer[existingRowNums.size()];
         finalArray = existingRowNums.toArray(finalArray);
 
@@ -95,17 +97,39 @@ public class Board{
 
 
     private Integer[] getColOptions(int colNum){
+        // TODO: Build out
         return new Integer[]{1};
     }
 
 
     /**
-     * @param gridNum Number index referencing a 3x3 group of cells
+     * @param gridIndex Number index referencing a 3x3 group of cells
      * @return Array of available numbers in the grid
      */
-    private Integer[] getGridOptions(int gridNum){
+    private Integer[] getGridOptions(int gridIndex){
+        // Retrieve a mapping of each grid and it's contained cell locations
+        HashMap<Integer, Integer[][]> gridMap = getGridHashMap();
 
+        // Using @param:gridNum, get the contained cells
+        Integer[][] cells = gridMap.get(gridIndex);
 
+        //
+        ArrayList<Integer> existingGridNums = new ArrayList<>();
+        int currentCellNum = 0;
+        for(int rowNum=0; rowNum<cells.length; rowNum++ ){
+            for(int colNum=0; colNum<cells.length; colNum++ ){
+                currentCellNum = puzzleNums[rowNum][colNum];
+                if(currentCellNum != 0){
+                    existingGridNums.add(currentCellNum);
+                }
+            }
+        }
+
+        // TODO: return numbers that don't already exist, not numbers that do
+        Integer[] finalArray = new Integer[existingGridNums.size()];
+        finalArray = existingGridNums.toArray(finalArray);
+
+        return finalArray;
     }
 
 
