@@ -88,7 +88,7 @@ public class Board{
         }
 
         Integer[] finalArray = new Integer[existingRowNums.size()];
-        finalArray = (Integer[]) existingRowNums.toArray();
+        finalArray = existingRowNums.toArray(finalArray);
 
         return finalArray;
     }
@@ -124,11 +124,14 @@ public class Board{
         Integer[] allNumOptions = ArrayUtils.addAll(rowOptions, colOptions);
         allNumOptions = ArrayUtils.addAll(allNumOptions, gridOptions);
 
-
-        // Retrieve unique numbers
+        // Use HashSet to retrieve unique numbers
         HashSet<Integer> uniqueNumOptions = new HashSet<>(Arrays.asList(allNumOptions));
 
-        return (Integer[]) uniqueNumOptions.toArray();
+        // Convert HashSet to Array
+        Integer[] finalArray = new Integer[uniqueNumOptions.size()];
+        finalArray = uniqueNumOptions.toArray(finalArray);
+
+        return finalArray;
     }
 
 
