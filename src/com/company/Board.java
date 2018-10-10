@@ -71,34 +71,61 @@ public class Board{
 
 
     public void solve() {
-        System.out.println(Arrays.toString(getNumOptions(1,9)));
+        System.out.println(Arrays.toString(getRowOptions(1)));
     }
 
 
-    private Integer[] getRowOptions(int rowNum){
+    private Integer[] getRowOptions(int rowNum) {
+
+        // Convert @param:rowNum to be zero-indexed; row 1 == index 0
+        rowNum -= 1;
+
         // Retrieve row array
         Integer[] rowNums = puzzleNums[rowNum];
 
         // Remove blanks(zeros)
-        List<Integer> existingRowNums = new ArrayList<Integer>(Arrays.asList(rowNums));
-        for(int i=0; i<existingRowNums.size(); i++){
-            if(existingRowNums.get(i) == 0){
-                existingRowNums.remove(i);
+        List<Integer> existingRowNums = new ArrayList<>();
+        for(int i=0; i<rowNums.length; i++){
+            if(rowNums[i] != 0){
+                existingRowNums.add(rowNums[i]);
             }
         }
-
 
         // TODO: return numbers that don't already exist, not numbers that do
         Integer[] finalArray = new Integer[existingRowNums.size()];
         finalArray = existingRowNums.toArray(finalArray);
 
-        return finalArray;
+        // Return numbers that don't already exist
+        Integer[] nonExistingNums = getNonExistingNums(finalArray);
+
+        return nonExistingNums;
     }
 
 
     private Integer[] getColOptions(int colNum){
-        // TODO: Build out
-        return new Integer[]{1};
+
+        // Convert @param:colNum to be zero-indexed; column 1 == index 0
+        colNum -= 1;
+
+        // Retrieve column array; Nth item in each row
+        Integer[] colNums = new Integer[9];
+        for(int i=0; i<9; i++){
+            colNums[i] = puzzleNums[i][colNum];
+        }
+
+        // Remove blanks(zeros)
+        List<Integer> existingColNums = new ArrayList<>();
+        for(int i=0; i<colNums.length; i++){
+            if(colNums[i] != 0){
+                existingColNums.add(colNums[i]);
+            }
+        }
+
+        // TODO: return numbers that don't already exist, not numbers that do
+        Integer[] finalArray = new Integer[existingColNums.size()];
+        finalArray = existingColNums.toArray(finalArray);
+
+        return finalArray;
     }
 
 
@@ -157,6 +184,38 @@ public class Board{
         finalArray = uniqueNumOptions.toArray(finalArray);
 
         return finalArray;
+    }
+
+
+
+    private Integer[] getNonExistingNums(Integer[] existingNums){
+
+        // TODO: fix bug
+        ArrayList<Integer> nonExistingNums = new ArrayList<>();
+        nonExistingNums.add(1);
+        nonExistingNums.add(2);
+        nonExistingNums.add(3);
+        nonExistingNums.add(4);
+        nonExistingNums.add(5);
+        nonExistingNums.add(6);
+        nonExistingNums.add(7);
+        nonExistingNums.add(8);
+        nonExistingNums.add(9);
+        for(int i=0; i<existingNums.length; i++){
+            nonExistingNums.remove(existingNums[i]-1);
+        }
+
+        // TODO: needs refactoring
+        // Convert ArrayList into Integer[]
+        Integer[] finalArray = new Integer[9-existingNums.length];
+        for(int i=0; i<nonExistingNums.size(); i++){
+            if(nonExistingNums.get(i) != 0)
+                finalArray[i] = nonExistingNums.get(i);
+        }
+
+
+        return finalArray;
+
     }
 
 
