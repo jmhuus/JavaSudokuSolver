@@ -74,7 +74,7 @@ public class Board{
 
         // Check if the number already exists
 
-        System.out.println(Arrays.toString(getNumOptions(1,1)));
+        System.out.println(Arrays.toString(getNumOptions(1,2)));
     }
 
 
@@ -183,18 +183,27 @@ public class Board{
         Integer[] allNumOptions = ArrayUtils.addAll(rowOptions, colOptions);
         allNumOptions = ArrayUtils.addAll(allNumOptions, gridOptions);
 
-        System.out.println("allNumOptions: " + Arrays.toString(allNumOptions));
+        // Use all number options to find the final(actually number options)
+        ArrayList<Integer> finalNumOptions = new ArrayList<>();
+        for(int currNum=1; currNum<=9; currNum++){
+            int currNumCount = 0;
+            for(Integer allNumsOption: allNumOptions){
+                if(currNum==allNumsOption){
+                    currNumCount += 1;
+                }
+            }
 
-        // Use HashSet to retrieve unique numbers
-        HashSet<Integer> uniqueNumOptions = new HashSet<>(Arrays.asList(allNumOptions));
+            // Number option must exist three times within allNumOptions in order to be a valid finalNumOption
+            if(currNumCount==3){
+                finalNumOptions.add(currNum);
+            }
+        }
 
-        // Convert HashSet to Array
-        Integer[] finalArray = new Integer[uniqueNumOptions.size()];
-        finalArray = uniqueNumOptions.toArray(finalArray);
 
-        System.out.println("finalArray: " + Arrays.toString(finalArray));
+        Integer[] finalNumOptionsArray = new Integer[finalNumOptions.size()];
+        finalNumOptionsArray = finalNumOptions.toArray(finalNumOptionsArray);
 
-        return finalArray;
+        return finalNumOptionsArray;
     }
 
 
