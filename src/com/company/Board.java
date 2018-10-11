@@ -71,7 +71,10 @@ public class Board{
 
 
     public void solve() {
-        System.out.println(Arrays.toString(getRowOptions(1)));
+
+        // Check if the number already exists
+
+        System.out.println(Arrays.toString(getNumOptions(1,1)));
     }
 
 
@@ -91,16 +94,15 @@ public class Board{
             }
         }
 
-        // TODO: return numbers that don't already exist, not numbers that do
-        Integer[] finalArray = new Integer[existingRowNums.size()];
-        finalArray = existingRowNums.toArray(finalArray);
+        // Convert List<> to Integer[]
+        Integer[] existingRowNums2 = new Integer[existingRowNums.size()];
+        existingRowNums2 = existingRowNums.toArray(existingRowNums2);
 
         // Return numbers that don't already exist
-        Integer[] nonExistingNums = getNonExistingNums(finalArray);
+        Integer[] nonExistingRowNums = getNonExistingNums(existingRowNums2);
 
-        return nonExistingNums;
+        return nonExistingRowNums;
     }
-
 
     private Integer[] getColOptions(int colNum){
 
@@ -121,42 +123,47 @@ public class Board{
             }
         }
 
-        // TODO: return numbers that don't already exist, not numbers that do
-        Integer[] finalArray = new Integer[existingColNums.size()];
-        finalArray = existingColNums.toArray(finalArray);
+        // Convert List<> to Integer[]
+        Integer[] existingColNums2 = new Integer[existingColNums.size()];
+        existingColNums2 = existingColNums.toArray(existingColNums2);
 
-        return finalArray;
+        // Return numbers that don't already exist
+        Integer[] nonExistingRowNums = getNonExistingNums(existingColNums2);
+
+        return nonExistingRowNums;
     }
 
-
-    /**
-     * @param gridIndex Number index referencing a 3x3 group of cells
-     * @return Array of available numbers in the grid
-     */
     private Integer[] getGridOptions(int gridIndex){
-        // Retrieve a mapping of each grid and it's contained cell locations
+        // All grids
         HashMap<Integer, Integer[][]> gridMap = getGridHashMap();
 
-        // Using @param:gridNum, get the contained cells
+        // Get specified grid
         Integer[][] cells = gridMap.get(gridIndex);
+        int rowIndexMin = cells[0][0]-1;
+        int rowIndexMax = cells[0][1]-1;
+        int colIndexMin = cells[1][0]-1;
+        int colIndexMax = cells[1][1]-1;
 
         //
         ArrayList<Integer> existingGridNums = new ArrayList<>();
         int currentCellNum = 0;
-        for(int rowNum=0; rowNum<cells.length; rowNum++ ){
-            for(int colNum=0; colNum<cells.length; colNum++ ){
-                currentCellNum = puzzleNums[rowNum][colNum];
+        for(int rowIndex=rowIndexMin; rowIndex<=rowIndexMax; rowIndex++ ){
+            for(int colIndex=colIndexMin; colIndex<=colIndexMax; colIndex++ ){
+                currentCellNum = puzzleNums[rowIndex][colIndex];
                 if(currentCellNum != 0){
                     existingGridNums.add(currentCellNum);
                 }
             }
         }
 
-        // TODO: return numbers that don't already exist, not numbers that do
-        Integer[] finalArray = new Integer[existingGridNums.size()];
-        finalArray = existingGridNums.toArray(finalArray);
+        // Convert List<> to Integer[]
+        Integer[] existingGridNums2 = new Integer[existingGridNums.size()];
+        existingGridNums2 = existingGridNums.toArray(existingGridNums2);
 
-        return finalArray;
+        // Return numbers that don't already exist
+        Integer[] nonExistingGridNums = getNonExistingNums(existingGridNums2);
+
+        return nonExistingGridNums;
     }
 
 
@@ -176,6 +183,8 @@ public class Board{
         Integer[] allNumOptions = ArrayUtils.addAll(rowOptions, colOptions);
         allNumOptions = ArrayUtils.addAll(allNumOptions, gridOptions);
 
+        System.out.println("allNumOptions: " + Arrays.toString(allNumOptions));
+
         // Use HashSet to retrieve unique numbers
         HashSet<Integer> uniqueNumOptions = new HashSet<>(Arrays.asList(allNumOptions));
 
@@ -183,14 +192,22 @@ public class Board{
         Integer[] finalArray = new Integer[uniqueNumOptions.size()];
         finalArray = uniqueNumOptions.toArray(finalArray);
 
+        System.out.println("finalArray: " + Arrays.toString(finalArray));
+
         return finalArray;
     }
 
 
-
+    /**
+     * Methods getRowOptions(), getColOptions(), and getGridOptions() retrieve already existing numbers.
+     * In order to return possible solution numbers for a given cell, use getNonExistingNums.
+     * @param existingNums provides existing row, column, and grid numbers.
+     * @return an array of possible number solutions.
+     */
     private Integer[] getNonExistingNums(Integer[] existingNums){
 
-        // TODO: fix bug
+        // TODO: Needs refactoring
+        // Default available numbers 1-9
         ArrayList<Integer> nonExistingNums = new ArrayList<>();
         nonExistingNums.add(1);
         nonExistingNums.add(2);
@@ -201,18 +218,18 @@ public class Board{
         nonExistingNums.add(7);
         nonExistingNums.add(8);
         nonExistingNums.add(9);
+
+        // Remove numbers that already exist
         for(int i=0; i<existingNums.length; i++){
-            nonExistingNums.remove(existingNums[i]-1);
+            nonExistingNums.remove(existingNums[i]);
         }
 
-        // TODO: needs refactoring
         // Convert ArrayList into Integer[]
         Integer[] finalArray = new Integer[9-existingNums.length];
         for(int i=0; i<nonExistingNums.size(); i++){
             if(nonExistingNums.get(i) != 0)
                 finalArray[i] = nonExistingNums.get(i);
         }
-
 
         return finalArray;
 
