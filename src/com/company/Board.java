@@ -22,29 +22,17 @@ public class Board{
 
         // Init empty cells
         cells = new ArrayList<>();
-        for(int row=0; row<9; row++){
-            for(int col=0; col<9; col++) {
+        for(int rowIndex=0; rowIndex<9; rowIndex++){
+            for(int colIndex=0; colIndex<9; colIndex++) {
 
-
-                // Init each cell options
-                int currentCellNum = puzzleNums[row][col];
-                ArrayList<Integer> tempNumOptions;
+                // Init each cell option
+                int currentCellNum = puzzleNums[rowIndex][colIndex];
+                Integer[] numOptions;
                 if (currentCellNum==0){
-                    tempNumOptions = new ArrayList<>();
-                    tempNumOptions.add(1);
-                    tempNumOptions.add(2);
-                    tempNumOptions.add(3);
-                    tempNumOptions.add(4);
-                    tempNumOptions.add(5);
-                    tempNumOptions.add(6);
-                    tempNumOptions.add(7);
-                    tempNumOptions.add(8);
-                    tempNumOptions.add(9);
-                    cells.add(new Cell(tempNumOptions, row, col));
+                    numOptions = getNumOptions(rowIndex+1, colIndex+1);
+                    cells.add(new Cell(numOptions, rowIndex+1, colIndex+1));
                 }else{
-                    tempNumOptions = new ArrayList<>();
-                    tempNumOptions.add(currentCellNum);
-                    cells.add(new Cell(tempNumOptions, row, col));
+                    cells.add(new Cell(new Integer[]{currentCellNum}, rowIndex, colIndex+1));
                 }
             }
         }

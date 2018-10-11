@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Cell {
 
-    ArrayList<Integer> options;
+    Integer[] options;
     int posx, posy;
 
 
-    public Cell(ArrayList<Integer> options, int posx, int posy) {
+    public Cell(Integer[] options, int posx, int posy) {
         this.options = options;
         this.posx = posx;
         this.posy = posy;
@@ -17,7 +17,7 @@ public class Cell {
 
     // Returns whether the square has a known answer
     public boolean isSolved(){
-        if(options.size() == 1){
+        if(options.length == 1){
             return true;
         }
 
@@ -25,8 +25,8 @@ public class Cell {
     }
 
 
-    // A new number option was found for the square
-    public void setOption(int newOption) {
-        options.add(newOption);
-    }
+    // TODO: include functionality to add a number option
+//    public void appendNumOption(int newOption){
+//
+//    }
 }
