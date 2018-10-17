@@ -51,7 +51,7 @@ public class Board{
 
         updateCellsArrayList();
         for(Cell cell: cells){
-            System.out.println(cell.getAddress() +": "+cell.getOptions().length);
+            System.out.println(cell.getAddress() +": "+Arrays.toString(cell.getOptions()));
         }
 
 
@@ -82,8 +82,9 @@ public class Board{
         for(int rowIndex=0; rowIndex<9; rowIndex++){
             for(int colIndex=0; colIndex<9; colIndex++){
                 int currentCellNum = puzzleNums[rowIndex][colIndex];
+
                 Integer[] numOptions = getNumOptions(rowIndex+1, colIndex+1);
-                if(currentCellNum != 0) {
+                if(currentCellNum == 0) {
                     cells.add(new Cell(numOptions, rowIndex + 1, colIndex + 1));
                 }
             }

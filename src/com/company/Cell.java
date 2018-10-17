@@ -25,8 +25,8 @@ public class Cell {
         return options;
     }
 
-    public int getAddress(){
-        return Integer.parseInt(row + "" + col);
+    public String getAddress(){
+        return ""+row+""+col;
     }
 
 
