@@ -30,9 +30,13 @@ public class Board{
                 Integer[] numOptions;
                 if (currentCellNum==0){
                     numOptions = getNumOptions(rowIndex+1, colIndex+1);
-                    cells.add(new Cell(numOptions, rowIndex+1, colIndex+1));
-                }else{
-                    cells.add(new Cell(new Integer[]{currentCellNum}, rowIndex, colIndex+1));
+
+                    // Reassign the solved number option
+                    if(numOptions.length == 1) {
+                        puzzleNums[rowIndex][colIndex] = numOptions[0];
+                    }else{
+                        cells.add(new Cell(numOptions, rowIndex + 1, colIndex + 1));
+                    }
                 }
             }
         }
@@ -59,10 +63,6 @@ public class Board{
 
 
     public void solve() {
-
-        // Check if the number already exists
-
-        System.out.println(Arrays.toString(getNumOptions(1,2)));
     }
 
 

@@ -20,6 +20,7 @@ public class Main {
         };
         Board board = new Board(boardNums);
         board.solve();
+        System.out.println(board.toString());
     }
 }
 
