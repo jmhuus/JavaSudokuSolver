@@ -22,24 +22,6 @@ public class Board{
 
         // Init empty cells
         cells = new ArrayList<>();
-        for(int rowIndex=0; rowIndex<9; rowIndex++){
-            for(int colIndex=0; colIndex<9; colIndex++) {
-
-                // Init each cell option
-                int currentCellNum = puzzleNums[rowIndex][colIndex];
-                Integer[] numOptions;
-                if (currentCellNum==0){
-                    numOptions = getNumOptions(rowIndex+1, colIndex+1);
-
-                    // Reassign the solved number option
-                    if(numOptions.length == 1) {
-                        puzzleNums[rowIndex][colIndex] = numOptions[0];
-                    }else{
-                        cells.add(new Cell(numOptions, rowIndex + 1, colIndex + 1));
-                    }
-                }
-            }
-        }
     }
 
 
@@ -63,6 +45,30 @@ public class Board{
 
 
     public void solve() {
+        for(int i=0; i<15; i++){
+            firstSolveStrategy();
+        }
+    }
+
+
+    public void firstSolveStrategy(){
+        // First attempt at solving the board
+        for(int rowIndex=0; rowIndex<9; rowIndex++){
+            for(int colIndex=0; colIndex<9; colIndex++) {
+
+                // Init each cell option
+                int currentCellNum = puzzleNums[rowIndex][colIndex];
+                Integer[] numOptions;
+                if (currentCellNum==0){
+                    numOptions = getNumOptions(rowIndex+1, colIndex+1);
+
+                    // Reassign the solved number option -or- store the number options
+                    if(numOptions.length == 1) {
+                        puzzleNums[rowIndex][colIndex] = numOptions[0];
+                    }
+                }
+            }
+        }
     }
 
 
