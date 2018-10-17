@@ -48,6 +48,13 @@ public class Board{
         for(int i=0; i<15; i++){
             firstSolveStrategy();
         }
+
+        updateCellsArrayList();
+        for(Cell cell: cells){
+            System.out.println(cell.getAddress() +": "+cell.getOptions().length);
+        }
+
+
     }
 
 
@@ -71,6 +78,17 @@ public class Board{
         }
     }
 
+    public void updateCellsArrayList(){
+        for(int rowIndex=0; rowIndex<9; rowIndex++){
+            for(int colIndex=0; colIndex<9; colIndex++){
+                int currentCellNum = puzzleNums[rowIndex][colIndex];
+                Integer[] numOptions = getNumOptions(rowIndex+1, colIndex+1);
+                if(currentCellNum != 0) {
+                    cells.add(new Cell(numOptions, rowIndex + 1, colIndex + 1));
+                }
+            }
+        }
+    }
 
     private Integer[] getRowOptions(int rowNum) {
 

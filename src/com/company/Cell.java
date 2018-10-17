@@ -1,17 +1,14 @@
 package com.company;
 
-import java.util.ArrayList;
-
 public class Cell {
 
-    Integer[] options;
-    int posx, posy;
+    private Integer[] options;
+    private int row, col;
 
-
-    public Cell(Integer[] options, int posx, int posy) {
+    public Cell(Integer[] options, int row, int col) {
         this.options = options;
-        this.posx = posx;
-        this.posy = posy;
+        this.row = row;
+        this.col = col;
     }
 
 
@@ -22,6 +19,14 @@ public class Cell {
         }
 
         return false;
+    }
+
+    public Integer[] getOptions() {
+        return options;
+    }
+
+    public int getAddress(){
+        return Integer.parseInt(row + "" + col);
     }
 
 
