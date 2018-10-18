@@ -4,7 +4,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 public class Board{
@@ -53,8 +52,6 @@ public class Board{
         for(Cell cell: cells){
             System.out.println(cell.getAddress() +": "+Arrays.toString(cell.getOptions()));
         }
-
-
     }
 
 
@@ -76,6 +73,29 @@ public class Board{
                 }
             }
         }
+    }
+
+    /**
+     * Hidden single is a number option that only occurs once or a given area (grid, row, column)
+     */
+    public void hiddenSinglesStrategy(){
+
+        // Row
+        for(int rowIndex=0; rowIndex<9){
+            for(int colIndex=0; colIndex<9){
+                Integer[] areaNumOptions = getNumOptions(++rowIndex, ++colIndex);
+                int numCount = 0;
+                for(Integer numOption: areaNumOptions) {
+                    
+                }
+            }
+        }
+
+
+
+        // Column
+
+        // Grid
     }
 
     public void updateCellsArrayList(){
