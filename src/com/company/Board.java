@@ -86,7 +86,7 @@ public class Board{
                 Integer[] areaNumOptions = getNumOptions(++rowIndex, ++colIndex);
                 int numCount = 0;
                 for(Integer numOption: areaNumOptions) {
-                    
+
                 }
             }
         }
