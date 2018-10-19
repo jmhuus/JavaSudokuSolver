@@ -76,26 +76,29 @@ public class Board{
     }
 
     /**
-     * Hidden single is a number option that only occurs once or a given area (grid, row, column)
+     *  X-Wing sudoku strategy is an advanced solving technique - look online for details
      */
-    public void hiddenSinglesStrategy(){
+    public void xWingStrategy(){
 
-        // Row
-        for(int rowIndex=0; rowIndex<9;){
-            for(int colIndex=0; colIndex<9;){
-                Integer[] areaNumOptions = getNumOptions(++rowIndex, ++colIndex);
-                int numCount = 0;
-                for(Integer numOption: areaNumOptions) {
+        // 5 because the other cells will reference other board locations that are 4 removed
+        for(int rowIndex=0; rowIndex<5; rowIndex++){
+            for(int colIndex=0; colIndex<5; colIndex++){
+                // Four corner Addresses; rowIndex=1 & colIndex=4   =>   address=14
+                int topLeftAddress = Integer.parseInt(""+rowIndex+""+colIndex);
+                int topRightAddress = Integer.parseInt(""+rowIndex+""+colIndex);
+                int bottomLeftAddress = Integer.parseInt(""+rowIndex+""+colIndex);
+                int bottomRightAddress = Integer.parseInt(""+rowIndex+""+colIndex);
 
-                }
+                // Retrieve four corner number options
+                Integer[] topLeftOptions = cells.get(topLeftAddress).getOptions();
+                Integer[] topRightOptions = cells.get(topRightAddress).getOptions();
+                Integer[] bottomLeftOptions = cells.get(bottomLeftAddress).getOptions();
+                Integer[] bottomRightOptions = cells.get(bottomRightAddress).getOptions();
+
+                // Search for numbers that exist in all four number options
+                Integer[] allNumOptions = ArrayUtils.addAll(topLeftOptions, topRightOptions, bottomLeftOptions, bottomRightOptions);
             }
         }
-
-
-
-        // Column
-
-        // Grid
     }
 
     public void updateCellsArrayList(){
