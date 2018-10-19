@@ -9,7 +9,7 @@ import java.util.List;
 public class Board{
 
     private Integer[][] puzzleNums;
-    private ArrayList<Cell> cells;
+    private HashMap<Integer, Cell> cells;
 
 
     /**
@@ -20,7 +20,7 @@ public class Board{
         this.puzzleNums = puzzle;
 
         // Init empty cells
-        cells = new ArrayList<>();
+        cells = new HashMap<>();
     }
 
 
@@ -49,8 +49,8 @@ public class Board{
         }
 
         updateCellsArrayList();
-        for(Cell cell: cells){
-            System.out.println(cell.getAddress() +": "+Arrays.toString(cell.getOptions()));
+        for(Integer address: cells.keySet()){
+            System.out.println(Arrays.toString(cells.get(address).getOptions()));
         }
     }
 
@@ -81,8 +81,8 @@ public class Board{
     public void hiddenSinglesStrategy(){
 
         // Row
-        for(int rowIndex=0; rowIndex<9){
-            for(int colIndex=0; colIndex<9){
+        for(int rowIndex=0; rowIndex<9;){
+            for(int colIndex=0; colIndex<9;){
                 Integer[] areaNumOptions = getNumOptions(++rowIndex, ++colIndex);
                 int numCount = 0;
                 for(Integer numOption: areaNumOptions) {
@@ -105,7 +105,7 @@ public class Board{
 
                 Integer[] numOptions = getNumOptions(rowIndex+1, colIndex+1);
                 if(currentCellNum == 0) {
-                    cells.add(new Cell(numOptions, rowIndex + 1, colIndex + 1));
+                    cells.put(Integer.parseInt((rowIndex+1)+""+(colIndex+1)), new Cell(numOptions, rowIndex + 1, colIndex + 1));
                 }
             }
         }
