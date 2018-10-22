@@ -9,7 +9,7 @@ import java.util.List;
 public class Board{
 
     private Integer[][] puzzleNums;
-    private HashMap<Integer, Cell> cells;
+    private HashMap<String, Cell> cells;
 
 
     /**
@@ -49,9 +49,7 @@ public class Board{
         }
 
         updateCellsArrayList();
-        for(Integer address: cells.keySet()){
-            System.out.println(Arrays.toString(cells.get(address).getOptions()));
-        }
+        xWingStrategy();
     }
 
 
@@ -84,19 +82,26 @@ public class Board{
         for(int rowIndex=0; rowIndex<5; rowIndex++){
             for(int colIndex=0; colIndex<5; colIndex++){
                 // Four corner Addresses; rowIndex=1 & colIndex=4   =>   address=14
-                int topLeftAddress = Integer.parseInt(""+rowIndex+""+colIndex);
-                int topRightAddress = Integer.parseInt(""+rowIndex+""+colIndex);
-                int bottomLeftAddress = Integer.parseInt(""+rowIndex+""+colIndex);
-                int bottomRightAddress = Integer.parseInt(""+rowIndex+""+colIndex);
+                String topLeftAddress = ""+(rowIndex+1)+""+(colIndex+1);
+                String topRightAddress = ""+(rowIndex+1)+""+(colIndex+1);
+                String bottomLeftAddress = ""+(rowIndex+1)+""+(colIndex+1);
+                String bottomRightAddress = ""+(rowIndex+1)+""+(colIndex+1);
 
                 // Retrieve four corner number options
-                Integer[] topLeftOptions = cells.get(topLeftAddress).getOptions();
-                Integer[] topRightOptions = cells.get(topRightAddress).getOptions();
-                Integer[] bottomLeftOptions = cells.get(bottomLeftAddress).getOptions();
-                Integer[] bottomRightOptions = cells.get(bottomRightAddress).getOptions();
+                Integer[] topLeftOptions = new Integer[]{};
+                Integer[] topRightOptions = new Integer[]{};
+                Integer[] bottomLeftOptions = new Integer[]{};
+                Integer[] bottomRightOptions = new Integer[]{};
+                if(cells.get(topLeftAddress) != null){topLeftOptions = cells.get(topLeftAddress).getOptions();}
+                if(cells.get(topLeftAddress) != null){topRightOptions = cells.get(topRightAddress).getOptions();}
+                if(cells.get(topLeftAddress) != null){bottomLeftOptions = cells.get(bottomLeftAddress).getOptions();}
+                if(cells.get(topLeftAddress) != null){bottomRightOptions = cells.get(bottomRightAddress).getOptions();}
 
                 // Search for numbers that exist in all four number options
-                Integer[] allNumOptions = ArrayUtils.addAll(topLeftOptions, topRightOptions, bottomLeftOptions, bottomRightOptions);
+                Integer[] allNumOptions = (Integer[]) ArrayUtils.addAll(topLeftOptions, topRightOptions, bottomLeftOptions, bottomRightOptions);
+                System.out.println("topLeft " + topLeftAddress + "topRight: " + topRightAddress + "bottomLeft: " + bottomLeftAddress + "bottomRight: " + bottomRightAddress);
+                for(Integer inttt: allNumOptions)
+                    System.out.println(inttt);
             }
         }
     }
@@ -108,7 +113,7 @@ public class Board{
 
                 Integer[] numOptions = getNumOptions(rowIndex+1, colIndex+1);
                 if(currentCellNum == 0) {
-                    cells.put(Integer.parseInt((rowIndex+1)+""+(colIndex+1)), new Cell(numOptions, rowIndex + 1, colIndex + 1));
+                    cells.put(""+(rowIndex+1)+""+(colIndex+1), new Cell(numOptions, rowIndex + 1, colIndex + 1));
                 }
             }
         }

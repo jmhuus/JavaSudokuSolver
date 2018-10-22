@@ -1,5 +1,7 @@
 package com.company;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +13,7 @@ public class Main {
                 {5,0,0,9,0,0,0,2,7},
                 {0,0,0,5,0,0,1,0,4},
                 {0,0,7,1,2,3,0,0,8},
-                {0,0,6,0,0,4,0,0,2},
+                {0,0,6,0,0,4,0,0,2  },
                 {4,8,0,0,0,0,0,1,6},
                 {9,0,0,6,0,0,5,0,0},
                 {7,0,0,3,9,5,2,0,0},
@@ -56,7 +58,7 @@ public class Main {
         };
         Board board = new Board(boardNums_expert);
         board.solve();
-        System.out.println(board.toString());
+//        System.out.println(board.toString());
     }
 }
 

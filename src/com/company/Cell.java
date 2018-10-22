@@ -22,7 +22,11 @@ public class Cell {
     }
 
     public Integer[] getOptions() {
-        return options;
+        if(options.length==0){
+            return new Integer[]{};
+        }else{
+            return options;
+        }
     }
 
     public String getAddress(){
