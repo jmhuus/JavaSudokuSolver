@@ -94,18 +94,35 @@ public class Board{
                 Integer[] bottomLeftOptions =  new Integer[0];
                 Integer[] bottomRightOptions =  new Integer[0];
 
-                topLeftOptions = cells.get(topLeftAddress).getOptions();
-                topRightOptions = cells.get(topRightAddress).getOptions();
-                bottomLeftOptions = cells.get(bottomLeftAddress).getOptions();
-                bottomRightOptions = cells.get(bottomRightAddress).getOptions();
+                if(cells.get(topLeftAddress) != null){topLeftOptions = cells.get(topLeftAddress).getOptions();}
+                if(cells.get(topRightAddress) != null){topRightOptions = cells.get(topRightAddress).getOptions();}
+                if(cells.get(bottomLeftAddress) != null){bottomLeftOptions = cells.get(bottomLeftAddress).getOptions();}
+                if(cells.get(bottomRightAddress) != null){bottomRightOptions = cells.get(bottomRightAddress).getOptions();}
 
 
                 // Search for numbers that exist in all four number options
                 Integer[] allNumOptions = ArrayUtils.addAll(topLeftOptions, topRightOptions);
                 allNumOptions = ArrayUtils.addAll(allNumOptions, bottomLeftOptions);
                 allNumOptions = ArrayUtils.addAll(allNumOptions, bottomRightOptions);
-                for(Integer inttt: allNumOptions)
-                    System.out.println(inttt);
+
+                // Sort the number options
+                Arrays.sort(allNumOptions);
+
+                // Using the sorted array, search for instances of four number occurrences
+                int numCount = 0;
+                int currentNum = allNumOptions[0];
+                for(int i=0; i<allNumOptions.length; i++){
+                    if(currentNum == allNumOptions[i]){
+
+                        // Four of the same number option were found
+                        if(++i == 4){
+                             // Eliminate currentNum from number options in cells located in the current column and row
+                            
+                        }
+                    }else{
+                        currentNum = allNumOptions[i];
+                    }
+                }
             }
         }
     }
