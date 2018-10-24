@@ -50,6 +50,10 @@ public class Board{
 
         updateCellsArrayList();
         xWingStrategy();
+
+        for(String address: cells.keySet()){
+            System.out.println(address + "  " + Arrays.toString(cells.get(address).getOptions()));
+        }
     }
 
 
@@ -86,7 +90,6 @@ public class Board{
                 String topRightAddress = ""+(rowIndex+1)+""+(colIndex+5);
                 String bottomLeftAddress = ""+(rowIndex+5)+""+(colIndex+1);
                 String bottomRightAddress = ""+(rowIndex+5)+""+(colIndex+5);
-                System.out.println("topLeft " + topLeftAddress + "topRight: " + topRightAddress + "bottomLeft: " + bottomLeftAddress + "bottomRight: " + bottomRightAddress);
 
                 // Retrieve four corner number options
                 Integer[] topLeftOptions =  new Integer[0];
@@ -117,13 +120,27 @@ public class Board{
                         // Four of the same number option were found
                         if(++i == 4){
                              // Eliminate currentNum from number options in cells located in the current column and row
-                            
+                            String addressesToExclude[] = new String[]{topLeftAddress, topRightAddress, bottomLeftAddress, bottomRightAddress};
+                            removeFromRow(currentNum, rowIndex+1, addressesToExclude);
+                            removeFromRow(currentNum, rowIndex+5, addressesToExclude);
                         }
                     }else{
                         currentNum = allNumOptions[i];
                     }
                 }
             }
+        }
+    }
+
+    public void removeFromRow(int numberToRemove, int rowNum, String excludeAddresses[]){
+        for(int colIndex=1; colIndex<=9; colIndex++){
+            // Build string address
+            String address = ""+rowNum+""+(colIndex+1);
+
+            // Retrieve cell object
+            Cell currentCell = cells.get(address);
+            if(currentCell == null || ArrayUtils.indexOf(excludeAddresses, address)>0) continue;
+            cells.replace(address, new Cell(ArrayUtils.removeElement(currentCell.getOptions(), numberToRemove),rowNum, colIndex+1));
         }
     }
 
