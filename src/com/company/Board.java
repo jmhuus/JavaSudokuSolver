@@ -51,6 +51,23 @@ public class Board{
         updateCellsArrayList();
         xWingStrategy();
 
+
+        // Test for single Cells that have only one number option left
+        for(String address: cells.keySet()){
+
+            // One available number option
+            if(cells.get(address).getOptions().length == 1) {
+
+                // Place number option into the board
+                int row = Integer.parseInt(address.substring(0, 1));
+                int col = Integer.parseInt(address.substring(1, 2));
+                puzzleNums[row-1][col-1] = cells.get(address).getOptions()[0];
+            }
+
+
+
+        }
+
         for(String address: cells.keySet()){
             System.out.println(address + "  " + Arrays.toString(cells.get(address).getOptions()));
         }
@@ -83,13 +100,13 @@ public class Board{
     public void xWingStrategy(){
 
         // 5 because the other cells will reference other board locations that are 4 removed
-        for(int rowIndex=0; rowIndex<5; rowIndex++){
-            for(int colIndex=0; colIndex<5; colIndex++){
+        for(int row=1; row<=6; row++){
+            for(int col=1; col<=6; col++){
                 // Four corner Addresses; rowIndex=1 & colIndex=4   =>   address=14
-                String topLeftAddress = ""+(rowIndex+1)+""+(colIndex+1);
-                String topRightAddress = ""+(rowIndex+1)+""+(colIndex+5);
-                String bottomLeftAddress = ""+(rowIndex+5)+""+(colIndex+1);
-                String bottomRightAddress = ""+(rowIndex+5)+""+(colIndex+5);
+                String topLeftAddress = ""+(row)+""+(col);
+                String topRightAddress = ""+(row)+""+(col+3);
+                String bottomLeftAddress = ""+(row+3)+""+(col);
+                String bottomRightAddress = ""+(row+3)+""+(col+3);
 
                 // Retrieve four corner number options
                 Integer[] topLeftOptions =  new Integer[0];
@@ -97,10 +114,13 @@ public class Board{
                 Integer[] bottomLeftOptions =  new Integer[0];
                 Integer[] bottomRightOptions =  new Integer[0];
 
-                if(cells.get(topLeftAddress) != null){topLeftOptions = cells.get(topLeftAddress).getOptions();}
-                if(cells.get(topRightAddress) != null){topRightOptions = cells.get(topRightAddress).getOptions();}
-                if(cells.get(bottomLeftAddress) != null){bottomLeftOptions = cells.get(bottomLeftAddress).getOptions();}
-                if(cells.get(bottomRightAddress) != null){bottomRightOptions = cells.get(bottomRightAddress).getOptions();}
+
+                // Retrieve each X Wing corner number options
+                // If any of the four corners is already solved => skip(continue)
+                if(cells.get(topLeftAddress) != null){topLeftOptions = cells.get(topLeftAddress).getOptions();}else{continue;}
+                if(cells.get(topRightAddress) != null){topRightOptions = cells.get(topRightAddress).getOptions();}else{continue;}
+                if(cells.get(bottomLeftAddress) != null){bottomLeftOptions = cells.get(bottomLeftAddress).getOptions();}else{continue;}
+                if(cells.get(bottomRightAddress) != null){bottomRightOptions = cells.get(bottomRightAddress).getOptions();}else{continue;}
 
 
                 // Search for numbers that exist in all four number options
@@ -110,19 +130,21 @@ public class Board{
 
                 // Sort the number options
                 Arrays.sort(allNumOptions);
+                System.out.println(Arrays.toString(allNumOptions));
 
                 // Using the sorted array, search for instances of four number occurrences
                 int numCount = 0;
                 int currentNum = allNumOptions[0];
-                for(int i=0; i<allNumOptions.length; i++){
+                for(int i=1; i<allNumOptions.length; i++){
+                    int random = allNumOptions[i];
                     if(currentNum == allNumOptions[i]){
 
-                        // Four of the same number option were found
-                        if(++i == 4){
+                        // Four of the same number option were found; four numbers founds == three consecutive matches
+                        if(++numCount == 3){
                              // Eliminate currentNum from number options in cells located in the current column and row
                             String addressesToExclude[] = new String[]{topLeftAddress, topRightAddress, bottomLeftAddress, bottomRightAddress};
-                            removeFromRow(currentNum, rowIndex+1, addressesToExclude);
-                            removeFromRow(currentNum, rowIndex+5, addressesToExclude);
+                            removeFromRow(currentNum, row+1, addressesToExclude);
+                            removeFromRow(currentNum, row+5, addressesToExclude);
                         }
                     }else{
                         currentNum = allNumOptions[i];
