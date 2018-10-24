@@ -61,15 +61,10 @@ public class Board{
                 // Place number option into the board
                 int row = Integer.parseInt(address.substring(0, 1));
                 int col = Integer.parseInt(address.substring(1, 2));
-                puzzleNums[row-1][col-1] = cells.get(address).getOptions()[0];
+                int solvedNum = cells.get(address).getOptions()[0];
+                System.out.println(address+"  "+solvedNum);
+                puzzleNums[row-1][col-1] = solvedNum;
             }
-
-
-
-        }
-
-        for(String address: cells.keySet()){
-            System.out.println(address + "  " + Arrays.toString(cells.get(address).getOptions()));
         }
     }
 
@@ -130,7 +125,6 @@ public class Board{
 
                 // Sort the number options
                 Arrays.sort(allNumOptions);
-                System.out.println(Arrays.toString(allNumOptions));
 
                 // Using the sorted array, search for instances of four number occurrences
                 int numCount = 0;
