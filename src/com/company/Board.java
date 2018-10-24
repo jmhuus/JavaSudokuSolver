@@ -83,23 +83,27 @@ public class Board{
             for(int colIndex=0; colIndex<5; colIndex++){
                 // Four corner Addresses; rowIndex=1 & colIndex=4   =>   address=14
                 String topLeftAddress = ""+(rowIndex+1)+""+(colIndex+1);
-                String topRightAddress = ""+(rowIndex+1)+""+(colIndex+1);
-                String bottomLeftAddress = ""+(rowIndex+1)+""+(colIndex+1);
-                String bottomRightAddress = ""+(rowIndex+1)+""+(colIndex+1);
+                String topRightAddress = ""+(rowIndex+1)+""+(colIndex+5);
+                String bottomLeftAddress = ""+(rowIndex+5)+""+(colIndex+1);
+                String bottomRightAddress = ""+(rowIndex+5)+""+(colIndex+5);
+                System.out.println("topLeft " + topLeftAddress + "topRight: " + topRightAddress + "bottomLeft: " + bottomLeftAddress + "bottomRight: " + bottomRightAddress);
 
                 // Retrieve four corner number options
-                Integer[] topLeftOptions = new Integer[]{};
-                Integer[] topRightOptions = new Integer[]{};
-                Integer[] bottomLeftOptions = new Integer[]{};
-                Integer[] bottomRightOptions = new Integer[]{};
-                if(cells.get(topLeftAddress) != null){topLeftOptions = cells.get(topLeftAddress).getOptions();}
-                if(cells.get(topLeftAddress) != null){topRightOptions = cells.get(topRightAddress).getOptions();}
-                if(cells.get(topLeftAddress) != null){bottomLeftOptions = cells.get(bottomLeftAddress).getOptions();}
-                if(cells.get(topLeftAddress) != null){bottomRightOptions = cells.get(bottomRightAddress).getOptions();}
+                Integer[] topLeftOptions =  new Integer[0];
+                Integer[] topRightOptions =  new Integer[0];
+                Integer[] bottomLeftOptions =  new Integer[0];
+                Integer[] bottomRightOptions =  new Integer[0];
+
+                topLeftOptions = cells.get(topLeftAddress).getOptions();
+                topRightOptions = cells.get(topRightAddress).getOptions();
+                bottomLeftOptions = cells.get(bottomLeftAddress).getOptions();
+                bottomRightOptions = cells.get(bottomRightAddress).getOptions();
+
 
                 // Search for numbers that exist in all four number options
-                Integer[] allNumOptions = (Integer[]) ArrayUtils.addAll(topLeftOptions, topRightOptions, bottomLeftOptions, bottomRightOptions);
-                System.out.println("topLeft " + topLeftAddress + "topRight: " + topRightAddress + "bottomLeft: " + bottomLeftAddress + "bottomRight: " + bottomRightAddress);
+                Integer[] allNumOptions = ArrayUtils.addAll(topLeftOptions, topRightOptions);
+                allNumOptions = ArrayUtils.addAll(allNumOptions, bottomLeftOptions);
+                allNumOptions = ArrayUtils.addAll(allNumOptions, bottomRightOptions);
                 for(Integer inttt: allNumOptions)
                     System.out.println(inttt);
             }
