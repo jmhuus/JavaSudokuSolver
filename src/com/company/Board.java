@@ -50,35 +50,21 @@ public class Board{
         }
 
         updateCellsArrayList();
-
-
-        String addresss;
-        for(int row=1; row<=9; row++){
-            for(int col=1; col<=9; col++) {
-                addresss = ""+row+""+col;
-
-                if(cells.get(addresss) != null){
-                    System.out.print(addresss);
-                    System.out.println(Arrays.toString(cells.get(addresss).getOptions()));
-                }
-            }
-        }
-
-        System.out.println("=============xWingStrategy()=============");
         xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
 
 
-        for(int row=1; row<=9; row++){
-            for(int col=1; col<=9; col++) {
-                addresss = ""+row+""+col;
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
 
-                if(cells.get(addresss) != null){
-                    System.out.print(addresss);
-                    System.out.println(Arrays.toString(cells.get(addresss).getOptions()));
-                }
-            }
-        }
+    }
 
+    public void updateBoardWithSingleCellOptions(){
         // Test for single Cells that have only one number option left
         for(String address: cells.keySet()){
 
@@ -93,8 +79,6 @@ public class Board{
                 puzzleNums[row-1][col-1] = solvedNum;
             }
         }
-
-
     }
 
 
@@ -165,11 +149,8 @@ public class Board{
                         // Four of the same number option were found; four numbers found == three consecutive matches
                         if(++numCount == 3){
 
-                            System.out.println(""+row+""+col+"  "+Arrays.toString(allNumOptions));
-
                             // Eliminate currentNum from number options in cells located in the current column and row
                             String addressesToExclude[] = new String[]{topLeftAddress, topRightAddress, bottomLeftAddress, bottomRightAddress};
-                            System.out.println("Removing "+currentNum+" From row "+row+" Exluding "+Arrays.toString(addressesToExclude)+"\n");
                             removeFromRow(currentNum, row, addressesToExclude);
                             removeFromRow(currentNum, row+3, addressesToExclude);
                         }

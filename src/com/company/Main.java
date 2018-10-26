@@ -60,7 +60,6 @@ public class Main {
         };
         Board board = new Board(boardNums_expert);
         board.solve();
-        System.out.println(board.toString());
     }
 }
 
