@@ -47,57 +47,53 @@ public class Board{
 
     public void solve() {
 
-        updateCellsArrayList();
-        nakedTripleRows();
-        updateBoardWithSingleCellOptions();
-        System.out.println(toString());
 
         updateCellsArrayList();
-        nakedTripleColumns();
-        updateBoardWithSingleCellOptions();
-        System.out.println(toString());
+        for(String address: cells.keySet()){
+            System.out.printf("Address %s Number Options %s\n", address, Arrays.toString(cells.get(address).getOptions()));
+        }
 
         updateCellsArrayList();
         nakedTripleRows();
-        updateBoardWithSingleCellOptions();
-        System.out.println(toString());
-
-        updateCellsArrayList();
         nakedTripleColumns();
         updateBoardWithSingleCellOptions();
-        System.out.println(toString());
 
-        updateCellsArrayList();
-        nakedTripleRows();
-        updateBoardWithSingleCellOptions();
-        System.out.println(toString());
 
-        updateCellsArrayList();
-        nakedTripleColumns();
-        updateBoardWithSingleCellOptions();
-        System.out.println(toString());
+        System.out.println("=======after========");
+        for(String address: cells.keySet()){
+            System.out.printf("Address %s Number Options %s\n", address, Arrays.toString(cells.get(address).getOptions()));
+        }
 
+
+
+        System.out.println(toString());
+        System.out.println(Arrays.toString(getNumOptions(4,4)));
     }
 
     public void updateBoardWithSingleCellOptions(){
         // Test for single Cells that have only one number option left
+        String[] cellsToRemove = new String[]{};
         for(String address: cells.keySet()){
 
             // One available number option
             if(cells.get(address).getOptions().length == 1) {
 
-
                 System.out.println("Solved Number Found:");
                 System.out.println(address + "   " + cells.get(address).getOptions()[0]);
-
-                System.out.println(Arrays.toString(getNumOptions(6,9)));
 
                 // Place number option into the board
                 int row = Integer.parseInt(address.substring(0, 1));
                 int col = Integer.parseInt(address.substring(1, 2));
                 int solvedNum = cells.get(address).getOptions()[0];
                 puzzleNums[row-1][col-1] = solvedNum;
+
+                // Can't remove cell in for loop
+                cellsToRemove = ArrayUtils.add(cellsToRemove, address);
             }
+        }
+
+        for(String address: cellsToRemove){
+            cells.remove(address);
         }
     }
 
@@ -127,7 +123,7 @@ public class Board{
         String address;
         for(int rowNum=1; rowNum<=9; rowNum++){
 
-            // Map of addresses and number options
+            // HashMap needed to store the address that goes with each set of number options; HashMap<Address, Number options>
             HashMap<String, Integer[]> addressAndNumOptions = new HashMap<>();
             for(int colNum=1; colNum<=9; colNum++){
 
@@ -145,28 +141,36 @@ public class Board{
 
                 // Searching for cells with only 2 or 3 number options
                 numOptionsToMatch = addressAndNumOptions.get(key);
-                if(numOptionsToMatch.length < 2 || numOptionsToMatch.length>3) continue;
+                if(numOptionsToMatch.length != 3) continue;
+//                System.out.println("Numbers to search for");
+//                System.out.println(Arrays.toString(numOptionsToMatch));
 
                 // Loop through the entire list again for matching number options
-                // TODO: include number options lengths of 2
                 int count = 0;
                 Integer[] currentNumOptions;
                 String[] addressExclusions = new String[]{};
+                outer:
                 for(String key2: addressAndNumOptions.keySet()){
                     currentNumOptions = addressAndNumOptions.get(key2);
+//                    System.out.println(Arrays.toString(currentNumOptions));
 
                     // Match found
-                    if(Arrays.equals(currentNumOptions, numOptionsToMatch)){
+                    for(int i=0; i<currentNumOptions.length; i++){
+//                        System.out.printf("%d exists in %s %s\n", currentNumOptions[i], Arrays.toString(numOptionsToMatch), ArrayUtils.contains(numOptionsToMatch, currentNumOptions[i]));
+                        if(! ArrayUtils.contains(numOptionsToMatch, currentNumOptions[i])){
+//                            System.out.println("Not a match");
+                            continue outer;
+                        }
+                    }
 
-                        // Track matching cell addresses
-                        addressExclusions = ArrayUtils.add(addressExclusions,key2);
-                        System.out.println(Arrays.toString(addressExclusions));
+                    // Track matching cell addresses
+                    addressExclusions = ArrayUtils.add(addressExclusions,key2);
 
-                        // Three occurances found
-                        if(++count==3){
-                            for(int numOptionIndex=0; numOptionIndex<currentNumOptions.length; numOptionIndex++){
-                                removeFromRow(currentNumOptions[numOptionIndex], rowNum, addressExclusions);
-                            }
+                    // Three occurrences found
+                    if(++count==3){
+                        for(int i=0; i<currentNumOptions.length; i++){
+                            System.out.printf("removing %d from row %d\n", currentNumOptions[i], rowNum);
+                            removeFromRow(currentNumOptions[i], rowNum, addressExclusions);
                         }
                     }
                 }
@@ -178,12 +182,12 @@ public class Board{
         String address;
         for(int colNum=1; colNum<=9; colNum++){
 
-            // Map of addresses and number options
+            // HashMap needed to store the address that goes with each set of number options; HashMap<Address, Number options>
             HashMap<String, Integer[]> addressAndNumOptions = new HashMap<>();
             for(int rowNum=1; rowNum<=9; rowNum++){
 
                 // Skip already solved numbers
-                if(puzzleNums[rowNum-1][rowNum-1] != 0) continue;
+                if(puzzleNums[rowNum-1][colNum-1] != 0) continue;
 
                 // Add to HashMap
                 address = ""+rowNum+""+colNum;
@@ -196,34 +200,44 @@ public class Board{
 
                 // Searching for cells with only 2 or 3 number options
                 numOptionsToMatch = addressAndNumOptions.get(key);
-                if(numOptionsToMatch.length < 2 || numOptionsToMatch.length>3) continue;
+                if(numOptionsToMatch.length != 3) continue;
+//                System.out.println("Numbers to search for");
+//                System.out.println(Arrays.toString(numOptionsToMatch));
 
                 // Loop through the entire list again for matching number options
-                // TODO: include number options lengths of 2
                 int count = 0;
                 Integer[] currentNumOptions;
                 String[] addressExclusions = new String[]{};
+                outer:
                 for(String key2: addressAndNumOptions.keySet()){
                     currentNumOptions = addressAndNumOptions.get(key2);
+//                    System.out.println(Arrays.toString(currentNumOptions));
 
                     // Match found
-                    if(Arrays.equals(currentNumOptions, numOptionsToMatch)){
+                    for(int i=0; i<currentNumOptions.length; i++){
+//                        System.out.printf("%d exists in %s %s\n", currentNumOptions[i], Arrays.toString(numOptionsToMatch), ArrayUtils.contains(numOptionsToMatch, currentNumOptions[i]));
+                        if(! ArrayUtils.contains(numOptionsToMatch, currentNumOptions[i])){
+//                            System.out.println("Not a match");
+                            continue outer;
+                        }
+                    }
 
-                        // Track matching cell addresses
-                        addressExclusions = ArrayUtils.add(addressExclusions,key2);
-                        System.out.println(Arrays.toString(addressExclusions));
+                    // Track matching cell addresses
+                    addressExclusions = ArrayUtils.add(addressExclusions,key2);
 
-                        // Three occurrences found
-                        if(++count==3){
-                            for(int numOptionIndex=0; numOptionIndex<currentNumOptions.length; numOptionIndex++){
-                                removeFromCol(currentNumOptions[numOptionIndex], colNum, addressExclusions);
-                            }
+                    // Three occurrences found
+                    if(++count==3){
+                        for(int i=0; i<currentNumOptions.length; i++){
+                            System.out.printf("removing %d from column %d\n", currentNumOptions[i], colNum);
+                            removeFromCol(currentNumOptions[i], colNum, addressExclusions);
                         }
                     }
                 }
             }
         }
     }
+
+    
 
     /**
      *  X-Wing sudoku strategy is an advanced solving technique - look online for details
