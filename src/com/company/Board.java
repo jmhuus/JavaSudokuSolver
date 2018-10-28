@@ -2,7 +2,6 @@ package com.company;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -49,25 +48,36 @@ public class Board{
 
 
         updateCellsArrayList();
+        int numOptionsTotalCount = 0;
         for(String address: cells.keySet()){
-            System.out.printf("Address %s Number Options %s\n", address, Arrays.toString(cells.get(address).getOptions()));
+            numOptionsTotalCount += cells.get(address).getOptions().length;
+        }
+        System.out.printf("Number Options Count: %d\n", numOptionsTotalCount);
+
+
+
+        // Run the three strategies several times
+        for(int i=0; i<100; i++) {
+            updateCellsArrayList();
+            nakedTripleRows();
+            nakedTripleColumns();
+            nakedTripleGrids();
+            updateBoardWithSingleCellOptions();
         }
 
-        updateCellsArrayList();
-        nakedTripleRows();
-        nakedTripleColumns();
+        // Update the board with solutions
         updateBoardWithSingleCellOptions();
 
 
-        System.out.println("=======after========");
+        numOptionsTotalCount = 0;
         for(String address: cells.keySet()){
-            System.out.printf("Address %s Number Options %s\n", address, Arrays.toString(cells.get(address).getOptions()));
+            numOptionsTotalCount += cells.get(address).getOptions().length;
         }
+        System.out.printf("Number Options Count: %d\n", numOptionsTotalCount);
 
 
 
         System.out.println(toString());
-        System.out.println(Arrays.toString(getNumOptions(4,4)));
     }
 
     public void updateBoardWithSingleCellOptions(){
@@ -132,7 +142,7 @@ public class Board{
 
                 // Add to HashMap
                 address = ""+rowNum+""+colNum;
-                addressAndNumOptions.put(address, getNumOptions(rowNum, colNum));
+                addressAndNumOptions.put(address, cells.get(address).getOptions());
             }
 
             // Search for instances of 3 of the same number options
@@ -169,7 +179,7 @@ public class Board{
                     // Three occurrences found
                     if(++count==3){
                         for(int i=0; i<currentNumOptions.length; i++){
-                            System.out.printf("removing %d from row %d\n", currentNumOptions[i], rowNum);
+//                            System.out.printf("removing %d from row %d\n", currentNumOptions[i], rowNum);
                             removeFromRow(currentNumOptions[i], rowNum, addressExclusions);
                         }
                     }
@@ -191,7 +201,7 @@ public class Board{
 
                 // Add to HashMap
                 address = ""+rowNum+""+colNum;
-                addressAndNumOptions.put(address, getNumOptions(rowNum, colNum));
+                addressAndNumOptions.put(address, cells.get(address).getOptions());
             }
 
             // Search for instances of 3 of the same number options
@@ -228,7 +238,7 @@ public class Board{
                     // Three occurrences found
                     if(++count==3){
                         for(int i=0; i<currentNumOptions.length; i++){
-                            System.out.printf("removing %d from column %d\n", currentNumOptions[i], colNum);
+//                            System.out.printf("removing %d from column %d\n", currentNumOptions[i], colNum);
                             removeFromCol(currentNumOptions[i], colNum, addressExclusions);
                         }
                     }
@@ -237,7 +247,77 @@ public class Board{
         }
     }
 
-    
+    public void nakedTripleGrids(){
+        String address;
+        for(int gridNum=1; gridNum<=9; gridNum++){
+
+            // Retrieve grid addresses
+            Integer[][] gridMinMaxAddresses = getGridHashMap().get(gridNum);
+            int rowMin = gridMinMaxAddresses[0][0];
+            int rowMax = gridMinMaxAddresses[0][1];
+            int colMin = gridMinMaxAddresses[1][0];
+            int colMax = gridMinMaxAddresses[1][1];
+
+
+            // HashMap needed to store the address that goes with each set of number options; HashMap<Address, Number options>
+            HashMap<String, Integer[]> addressAndNumOptions = new HashMap<>();
+            for(int rowNum=rowMin; rowNum<=rowMax; rowNum++){
+                for(int colNum=colMin; colNum<=colMax; colNum++) {
+
+                    // Skip already solved numbers
+                    if (puzzleNums[rowNum - 1][colNum - 1] != 0) continue;
+
+                    // Add to HashMap
+                    address = "" + rowNum + "" + colNum;
+                    addressAndNumOptions.put(address, cells.get(address).getOptions());
+                }
+            }
+
+
+            // Search for instances of 3 of the same number options
+            Integer[] numOptionsToMatch;
+            for(String key: addressAndNumOptions.keySet()){
+
+                // Searching for cells with only 2 or 3 number options
+                numOptionsToMatch = addressAndNumOptions.get(key);
+                if(numOptionsToMatch.length != 3) continue;
+//                System.out.println("Numbers to search for");
+//                System.out.println(Arrays.toString(numOptionsToMatch));
+
+                // Loop through the entire list again for matching number options
+                int count = 0;
+                Integer[] currentNumOptions;
+                String[] addressExclusions = new String[]{};
+                outer:
+                for(String key2: addressAndNumOptions.keySet()){
+                    currentNumOptions = addressAndNumOptions.get(key2);
+//                    System.out.println(Arrays.toString(currentNumOptions));
+
+                    // Match found
+                    for(int i=0; i<currentNumOptions.length; i++){
+//                        System.out.printf("%d exists in %s %s\n", currentNumOptions[i], Arrays.toString(numOptionsToMatch), ArrayUtils.contains(numOptionsToMatch, currentNumOptions[i]));
+                        if(! ArrayUtils.contains(numOptionsToMatch, currentNumOptions[i])){
+//                            System.out.println("Not a match");
+                            continue outer;
+                        }
+                    }
+
+                    // Track matching cell addresses
+                    addressExclusions = ArrayUtils.add(addressExclusions,key2);
+
+                    // Three occurrences found
+                    if(++count==3){
+                        for(int i=0; i<currentNumOptions.length; i++){
+//                            System.out.printf("removing %d from grid %d\n", currentNumOptions[i], gridNum);
+                            removeFromGrid(currentNumOptions[i], gridNum, addressExclusions);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
 
     /**
      *  X-Wing sudoku strategy is an advanced solving technique - look online for details
@@ -325,6 +405,32 @@ public class Board{
             // Remove the number from the entire row
             if(currentCell == null || ArrayUtils.indexOf(excludeAddresses, address)>-1) continue;
             cells.replace(address, new Cell(ArrayUtils.removeElement(currentCell.getOptions(), numberToRemove), rowNum, colNum));
+        }
+    }
+
+    public void removeFromGrid(int numberToRemove, int gridNum, String[] excludeAddresses){
+        // Retrieve grid addresses
+        Integer[][] gridMinMaxAddresses = getGridHashMap().get(gridNum);
+        int rowMin = gridMinMaxAddresses[0][0];
+        int rowMax = gridMinMaxAddresses[0][1];
+        int colMin = gridMinMaxAddresses[1][0];
+        int colMax = gridMinMaxAddresses[1][1];
+
+
+        for(int rowNum=rowMin; rowNum<=rowMax; rowNum++){
+            for(int colNum=colMin; colNum<=colMax; colNum++) {
+                // Build string address
+                String address = "" + rowNum + "" + colNum;
+
+                // Retrieve cell object
+                Cell currentCell = cells.get(address);
+
+                // Remove the number from the entire row
+                if (currentCell == null || ArrayUtils.indexOf(excludeAddresses, address) > -1) continue;
+//                System.out.printf("Removing %s from cell %s    Number options before %s\n", numberToRemove, address, Arrays.toString(cells.get(address).getOptions()));
+                cells.replace(address, new Cell(ArrayUtils.removeElement(currentCell.getOptions(), numberToRemove), rowNum, colNum));
+//                System.out.printf("Removing %s from cell %s    Number options after %s\n", numberToRemove, address, Arrays.toString(cells.get(address).getOptions()));
+            }
         }
     }
 
@@ -540,7 +646,7 @@ public class Board{
     }
 
     private HashMap<Integer, Integer[][]> getGridHashMap(){
-        // Key=[rowNum range][colNum range]     Value = Grid Index
+        // Key=Grid Index     Value = [rowNum range][colNum range]
         HashMap<Integer, Integer[][]> gridMap = new HashMap<>();
         gridMap.put(1, new Integer[][]{{1,3},{1,3}});
         gridMap.put(2, new Integer[][]{{1,3},{4,6}});
