@@ -45,109 +45,10 @@ public class Board{
 
     public void solve() {
 
-        for(int i=0; i<15; i++){
-            firstSolveStrategy();
-        }
-
-
         updateCellsArrayList();
-        xWingStrategy();
+        nakedTriple();
         updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
-        updateCellsArrayList();
-        xWingStrategy();
-        updateBoardWithSingleCellOptions();
-        cells = new HashMap<>();
-        System.out.println(toString()+"\n");
-
+        System.out.println(toString());
 
     }
 
@@ -158,11 +59,16 @@ public class Board{
             // One available number option
             if(cells.get(address).getOptions().length == 1) {
 
+
+                System.out.println("Solved Number Found:");
+                System.out.println(address + "   " + cells.get(address).getOptions()[0]);
+
+                System.out.println(Arrays.toString(getNumOptions(6,9)));
+
                 // Place number option into the board
                 int row = Integer.parseInt(address.substring(0, 1));
                 int col = Integer.parseInt(address.substring(1, 2));
                 int solvedNum = cells.get(address).getOptions()[0];
-                System.out.println(address+"  "+solvedNum);
                 puzzleNums[row-1][col-1] = solvedNum;
             }
         }
@@ -183,6 +89,66 @@ public class Board{
                     // Reassign the solved number option -or- store the number options
                     if(numOptions.length == 1) {
                         puzzleNums[rowIndex][colIndex] = numOptions[0];
+                    }
+                }
+            }
+        }
+    }
+
+
+    public void nakedTriple(){
+        String address;
+        for(int rowNum=1; rowNum<=9; rowNum++){
+
+            Integer[][] entireRow = new Integer[][]{};
+            for(int colNum=1; colNum<=9; colNum++){
+                address = ""+rowNum+""+colNum;
+
+                if(cells.get(address)!=null) {
+                    entireRow = ArrayUtils.add(entireRow, cells.get(address).getOptions());
+                }
+            }
+
+            for(Integer[] numOp: entireRow){
+                System.out.println(Arrays.toString(numOp));
+            }
+            System.out.println("\n");
+
+            // Loop though each cell numberOption
+            for(int cellIndex=0; cellIndex<entireRow.length; cellIndex++) {
+
+                // Track which cells fit nakedTriple criteria
+                HashMap<String, Integer[]> exclusionAddresses = new HashMap<>();
+
+                // Search for 3 cells that have the same number options
+                int cellTargetCount=0;
+
+                // Only analyze cells with 2-3 number options
+                if (entireRow[cellIndex].length < 2 || entireRow[cellIndex].length > 3) continue;
+
+
+                // Cross-reference each cell with all other cells, checking for number option equality
+                outer:
+                for (int cellIndex2 = 0; cellIndex<entireRow.length; cellIndex2++) {
+                    if (Arrays.equals(entireRow[cellIndex], entireRow[cellIndex2])) {
+
+                        // Wrong because entireRow may have skipped indexes
+                        address = "" + rowNum + "" + (cellIndex2 + 1);
+                        exclusionAddresses.put(address, entireRow[cellIndex]);
+
+                        if (++cellTargetCount == 3) {
+                            continue outer;
+                        }
+                    }
+                }
+
+                // Remove numbers from other cells of the row
+//                if(exclusionAddresses.size()==0) continue;
+                for (String addressKey: exclusionAddresses.keySet()){
+                    Integer[] numOptions = exclusionAddresses.get(addressKey);
+                    String[] exclusionStrings = exclusionAddresses.keySet().toArray(new String[exclusionAddresses.keySet().toArray().length]);
+                    for(int i=0; i<numOptions.length; i++) {
+                        removeFromRow(numOptions[i], rowNum, exclusionStrings);
                     }
                 }
             }
@@ -343,12 +309,6 @@ public class Board{
         int colIndexMin = cells[1][0]-1;
         int colIndexMax = cells[1][1]-1;
 
-        System.out.println("===================grid index=====================");
-        System.out.println(gridIndex);
-        System.out.println("===================cell min/maxes=====================");
-        System.out.println(rowIndexMin + " to " + rowIndexMax);
-        System.out.println(colIndexMin + " to " + colIndexMax);
-
         //
         ArrayList<Integer> existingGridNums = new ArrayList<>();
         int currentCellNum = 0;
@@ -365,23 +325,8 @@ public class Board{
         Integer[] existingGridNums2 = new Integer[existingGridNums.size()];
         existingGridNums2 = existingGridNums.toArray(existingGridNums2);
 
-
-        System.out.println("Existing Grid Nums2");
-        for(int i=0; i<existingGridNums2.length; i++){
-            System.out.print(existingGridNums2[i]);
-        }
-        System.out.println("\n");
-
         // Return numbers that don't already exist
         Integer[] nonExistingGridNums = getNonExistingNums(existingGridNums2);
-
-
-
-        System.out.println("Non Existing Grid Nums");
-        for(int i=0; i<nonExistingGridNums.length; i++){
-            System.out.print(nonExistingGridNums[i]);
-        }
-        System.out.println("\n");
 
         return nonExistingGridNums;
     }
