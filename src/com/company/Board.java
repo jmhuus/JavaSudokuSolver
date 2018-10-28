@@ -48,14 +48,35 @@ public class Board{
     public void solve() {
 
         updateCellsArrayList();
-        nakedTriple();
+        nakedTripleRows();
         updateBoardWithSingleCellOptions();
         System.out.println(toString());
 
         updateCellsArrayList();
-        nakedTriple();
+        nakedTripleColumns();
         updateBoardWithSingleCellOptions();
         System.out.println(toString());
+
+        updateCellsArrayList();
+        nakedTripleRows();
+        updateBoardWithSingleCellOptions();
+        System.out.println(toString());
+
+        updateCellsArrayList();
+        nakedTripleColumns();
+        updateBoardWithSingleCellOptions();
+        System.out.println(toString());
+
+        updateCellsArrayList();
+        nakedTripleRows();
+        updateBoardWithSingleCellOptions();
+        System.out.println(toString());
+
+        updateCellsArrayList();
+        nakedTripleColumns();
+        updateBoardWithSingleCellOptions();
+        System.out.println(toString());
+
     }
 
     public void updateBoardWithSingleCellOptions(){
@@ -102,23 +123,28 @@ public class Board{
     }
 
 
-    public void nakedTriple(){
+    public void nakedTripleRows(){
         String address;
         for(int rowNum=1; rowNum<=9; rowNum++){
 
             // Map of addresses and number options
-            HashMap<String, Integer[]> addressAndnumOptions = new HashMap<>();
+            HashMap<String, Integer[]> addressAndNumOptions = new HashMap<>();
             for(int colNum=1; colNum<=9; colNum++){
+
+                // Skip already solved numbers
+                if(puzzleNums[rowNum-1][colNum-1] != 0) continue;
+
+                // Add to HashMap
                 address = ""+rowNum+""+colNum;
-                addressAndnumOptions.put(address, getNumOptions(rowNum, colNum));
+                addressAndNumOptions.put(address, getNumOptions(rowNum, colNum));
             }
 
             // Search for instances of 3 of the same number options
             Integer[] numOptionsToMatch;
-            for(String key: addressAndnumOptions.keySet()){
+            for(String key: addressAndNumOptions.keySet()){
 
                 // Searching for cells with only 2 or 3 number options
-                numOptionsToMatch = addressAndnumOptions.get(key);
+                numOptionsToMatch = addressAndNumOptions.get(key);
                 if(numOptionsToMatch.length < 2 || numOptionsToMatch.length>3) continue;
 
                 // Loop through the entire list again for matching number options
@@ -126,19 +152,71 @@ public class Board{
                 int count = 0;
                 Integer[] currentNumOptions;
                 String[] addressExclusions = new String[]{};
-                for(String key2: addressAndnumOptions.keySet()){
-                    currentNumOptions = addressAndnumOptions.get(key2);
+                for(String key2: addressAndNumOptions.keySet()){
+                    currentNumOptions = addressAndNumOptions.get(key2);
 
                     // Match found
                     if(Arrays.equals(currentNumOptions, numOptionsToMatch)){
 
                         // Track matching cell addresses
                         addressExclusions = ArrayUtils.add(addressExclusions,key2);
+                        System.out.println(Arrays.toString(addressExclusions));
 
                         // Three occurances found
                         if(++count==3){
                             for(int numOptionIndex=0; numOptionIndex<currentNumOptions.length; numOptionIndex++){
                                 removeFromRow(currentNumOptions[numOptionIndex], rowNum, addressExclusions);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void nakedTripleColumns(){
+        String address;
+        for(int colNum=1; colNum<=9; colNum++){
+
+            // Map of addresses and number options
+            HashMap<String, Integer[]> addressAndNumOptions = new HashMap<>();
+            for(int rowNum=1; rowNum<=9; rowNum++){
+
+                // Skip already solved numbers
+                if(puzzleNums[rowNum-1][rowNum-1] != 0) continue;
+
+                // Add to HashMap
+                address = ""+rowNum+""+colNum;
+                addressAndNumOptions.put(address, getNumOptions(rowNum, colNum));
+            }
+
+            // Search for instances of 3 of the same number options
+            Integer[] numOptionsToMatch;
+            for(String key: addressAndNumOptions.keySet()){
+
+                // Searching for cells with only 2 or 3 number options
+                numOptionsToMatch = addressAndNumOptions.get(key);
+                if(numOptionsToMatch.length < 2 || numOptionsToMatch.length>3) continue;
+
+                // Loop through the entire list again for matching number options
+                // TODO: include number options lengths of 2
+                int count = 0;
+                Integer[] currentNumOptions;
+                String[] addressExclusions = new String[]{};
+                for(String key2: addressAndNumOptions.keySet()){
+                    currentNumOptions = addressAndNumOptions.get(key2);
+
+                    // Match found
+                    if(Arrays.equals(currentNumOptions, numOptionsToMatch)){
+
+                        // Track matching cell addresses
+                        addressExclusions = ArrayUtils.add(addressExclusions,key2);
+                        System.out.println(Arrays.toString(addressExclusions));
+
+                        // Three occurrences found
+                        if(++count==3){
+                            for(int numOptionIndex=0; numOptionIndex<currentNumOptions.length; numOptionIndex++){
+                                removeFromCol(currentNumOptions[numOptionIndex], colNum, addressExclusions);
                             }
                         }
                     }
@@ -208,7 +286,7 @@ public class Board{
         }
     }
 
-    public void removeFromRow(int numberToRemove, int rowNum, String excludeAddresses[]){
+    public void removeFromRow(int numberToRemove, int rowNum, String[] excludeAddresses){
         for(int colIndex=1; colIndex<=9; colIndex++){
             // Build string address
             String address = ""+rowNum+""+(colIndex);
@@ -216,9 +294,23 @@ public class Board{
             // Retrieve cell object
             Cell currentCell = cells.get(address);
 
-            // Remove the number from the entire row,
+            // Remove the number from the entire row
             if(currentCell == null || ArrayUtils.indexOf(excludeAddresses, address)>-1) continue;
             cells.replace(address, new Cell(ArrayUtils.removeElement(currentCell.getOptions(), numberToRemove),rowNum, colIndex));
+        }
+    }
+
+    public void removeFromCol(int numberToRemove, int colNum, String[] excludeAddresses){
+        for(int rowNum=1; rowNum<=9; rowNum++){
+            // Build string address
+            String address = ""+rowNum+""+colNum;
+
+            // Retrieve cell object
+            Cell currentCell = cells.get(address);
+
+            // Remove the number from the entire row
+            if(currentCell == null || ArrayUtils.indexOf(excludeAddresses, address)>-1) continue;
+            cells.replace(address, new Cell(ArrayUtils.removeElement(currentCell.getOptions(), numberToRemove), rowNum, colNum));
         }
     }
 
