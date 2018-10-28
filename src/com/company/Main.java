@@ -2,6 +2,7 @@ package com.company;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -70,8 +71,26 @@ public class Main {
                 {0,3,6,0,0,5,0,0,2},
                 {8,0,0,1,9,0,0,0,0},
         };
-        Board board = new Board(boardNums_test1);
+        Board board = new Board(boardNums_expert);
         board.solve();
      }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

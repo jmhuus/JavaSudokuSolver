@@ -1,6 +1,8 @@
 package com.company;
 
 import org.apache.commons.lang3.ArrayUtils;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,6 +52,10 @@ public class Board{
         updateBoardWithSingleCellOptions();
         System.out.println(toString());
 
+        updateCellsArrayList();
+        nakedTriple();
+        updateBoardWithSingleCellOptions();
+        System.out.println(toString());
     }
 
     public void updateBoardWithSingleCellOptions(){
@@ -100,55 +106,41 @@ public class Board{
         String address;
         for(int rowNum=1; rowNum<=9; rowNum++){
 
-            Integer[][] entireRow = new Integer[][]{};
+            // Map of addresses and number options
+            HashMap<String, Integer[]> addressAndnumOptions = new HashMap<>();
             for(int colNum=1; colNum<=9; colNum++){
                 address = ""+rowNum+""+colNum;
-
-                if(cells.get(address)!=null) {
-                    entireRow = ArrayUtils.add(entireRow, cells.get(address).getOptions());
-                }
+                addressAndnumOptions.put(address, getNumOptions(rowNum, colNum));
             }
 
-            for(Integer[] numOp: entireRow){
-                System.out.println(Arrays.toString(numOp));
-            }
-            System.out.println("\n");
+            // Search for instances of 3 of the same number options
+            Integer[] numOptionsToMatch;
+            for(String key: addressAndnumOptions.keySet()){
 
-            // Loop though each cell numberOption
-            for(int cellIndex=0; cellIndex<entireRow.length; cellIndex++) {
+                // Searching for cells with only 2 or 3 number options
+                numOptionsToMatch = addressAndnumOptions.get(key);
+                if(numOptionsToMatch.length < 2 || numOptionsToMatch.length>3) continue;
 
-                // Track which cells fit nakedTriple criteria
-                HashMap<String, Integer[]> exclusionAddresses = new HashMap<>();
+                // Loop through the entire list again for matching number options
+                // TODO: include number options lengths of 2
+                int count = 0;
+                Integer[] currentNumOptions;
+                String[] addressExclusions = new String[]{};
+                for(String key2: addressAndnumOptions.keySet()){
+                    currentNumOptions = addressAndnumOptions.get(key2);
 
-                // Search for 3 cells that have the same number options
-                int cellTargetCount=0;
+                    // Match found
+                    if(Arrays.equals(currentNumOptions, numOptionsToMatch)){
 
-                // Only analyze cells with 2-3 number options
-                if (entireRow[cellIndex].length < 2 || entireRow[cellIndex].length > 3) continue;
+                        // Track matching cell addresses
+                        addressExclusions = ArrayUtils.add(addressExclusions,key2);
 
-
-                // Cross-reference each cell with all other cells, checking for number option equality
-                outer:
-                for (int cellIndex2 = 0; cellIndex<entireRow.length; cellIndex2++) {
-                    if (Arrays.equals(entireRow[cellIndex], entireRow[cellIndex2])) {
-
-                        // Wrong because entireRow may have skipped indexes
-                        address = "" + rowNum + "" + (cellIndex2 + 1);
-                        exclusionAddresses.put(address, entireRow[cellIndex]);
-
-                        if (++cellTargetCount == 3) {
-                            continue outer;
+                        // Three occurances found
+                        if(++count==3){
+                            for(int numOptionIndex=0; numOptionIndex<currentNumOptions.length; numOptionIndex++){
+                                removeFromRow(currentNumOptions[numOptionIndex], rowNum, addressExclusions);
+                            }
                         }
-                    }
-                }
-
-                // Remove numbers from other cells of the row
-//                if(exclusionAddresses.size()==0) continue;
-                for (String addressKey: exclusionAddresses.keySet()){
-                    Integer[] numOptions = exclusionAddresses.get(addressKey);
-                    String[] exclusionStrings = exclusionAddresses.keySet().toArray(new String[exclusionAddresses.keySet().toArray().length]);
-                    for(int i=0; i<numOptions.length; i++) {
-                        removeFromRow(numOptions[i], rowNum, exclusionStrings);
                     }
                 }
             }
