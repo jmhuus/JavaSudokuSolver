@@ -49,6 +49,7 @@ public class Board{
             firstSolveStrategy();
         }
 
+
         updateCellsArrayList();
         xWingStrategy();
         updateBoardWithSingleCellOptions();
@@ -61,6 +62,92 @@ public class Board{
         updateBoardWithSingleCellOptions();
         cells = new HashMap<>();
         System.out.println(toString()+"\n");
+
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
+
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
+
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
+
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
+
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
+
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
+
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
+
+
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
+
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
+
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
+
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
+
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
+
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
+
+        updateCellsArrayList();
+        xWingStrategy();
+        updateBoardWithSingleCellOptions();
+        cells = new HashMap<>();
+        System.out.println(toString()+"\n");
+
 
     }
 
@@ -156,6 +243,7 @@ public class Board{
                         }
                     }else{
                         currentNum = allNumOptions[i];
+                        numCount = 0;
                     }
                 }
             }
@@ -255,6 +343,12 @@ public class Board{
         int colIndexMin = cells[1][0]-1;
         int colIndexMax = cells[1][1]-1;
 
+        System.out.println("===================grid index=====================");
+        System.out.println(gridIndex);
+        System.out.println("===================cell min/maxes=====================");
+        System.out.println(rowIndexMin + " to " + rowIndexMax);
+        System.out.println(colIndexMin + " to " + colIndexMax);
+
         //
         ArrayList<Integer> existingGridNums = new ArrayList<>();
         int currentCellNum = 0;
@@ -271,8 +365,23 @@ public class Board{
         Integer[] existingGridNums2 = new Integer[existingGridNums.size()];
         existingGridNums2 = existingGridNums.toArray(existingGridNums2);
 
+
+        System.out.println("Existing Grid Nums2");
+        for(int i=0; i<existingGridNums2.length; i++){
+            System.out.print(existingGridNums2[i]);
+        }
+        System.out.println("\n");
+
         // Return numbers that don't already exist
         Integer[] nonExistingGridNums = getNonExistingNums(existingGridNums2);
+
+
+
+        System.out.println("Non Existing Grid Nums");
+        for(int i=0; i<nonExistingGridNums.length; i++){
+            System.out.print(nonExistingGridNums[i]);
+        }
+        System.out.println("\n");
 
         return nonExistingGridNums;
     }
