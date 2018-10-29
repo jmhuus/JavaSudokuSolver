@@ -65,6 +65,9 @@ public class Board{
         // Run solving strategies
         for(int x=0; x<100; x++) {
             for (int i = 0; i < 50; i++) {
+                nakedQuadrupleRows();
+                nakedQuarupleColumns();
+                nakedQuadrupleGrids();  
                 nakedTripleRows();
                 nakedTripleColumns();
                 nakedTripleGrids();
@@ -145,6 +148,193 @@ public class Board{
         }
     }
 
+    public void nakedQuadrupleRows(){
+        String address;
+        for(int rowNum=1; rowNum<=9; rowNum++){
+
+            // HashMap needed to store the address that goes with each set of number options; HashMap<Address, Number options>
+            HashMap<String, Integer[]> addressAndNumOptions = new HashMap<>();
+            for(int colNum=1; colNum<=9; colNum++){
+
+                // Skip already solved numbers
+                if(puzzleNums[rowNum-1][colNum-1] != 0) continue;
+
+                // Add to HashMap
+                address = ""+rowNum+""+colNum;
+                addressAndNumOptions.put(address, cells.get(address).getOptions());
+            }
+
+            // Search for instances of 3 of the same number options
+            Integer[] numOptionsToMatch;
+            for(String key: addressAndNumOptions.keySet()){
+
+                // Searching for cells with only 3 number options
+                numOptionsToMatch = addressAndNumOptions.get(key);
+                if(numOptionsToMatch.length != 4) continue;
+//                System.out.println("Numbers to search for");
+//                System.out.println(Arrays.toString(numOptionsToMatch));
+
+                // Loop through the entire list again for matching number options
+                int count = 0;
+                Integer[] currentNumOptions;
+                String[] addressExclusions = new String[]{};
+                outer:
+                for(String key2: addressAndNumOptions.keySet()){
+                    currentNumOptions = addressAndNumOptions.get(key2);
+//                    System.out.println(Arrays.toString(currentNumOptions));
+
+                    // Match found
+                    for(int i=0; i<currentNumOptions.length; i++){
+//                        System.out.printf("%d exists in %s %s\n", currentNumOptions[i], Arrays.toString(numOptionsToMatch), ArrayUtils.contains(numOptionsToMatch, currentNumOptions[i]));
+                        if(! ArrayUtils.contains(numOptionsToMatch, currentNumOptions[i])){
+//                            System.out.println("Not a match");
+                            continue outer;
+                        }
+                    }
+
+                    // Track matching cell addresses
+                    addressExclusions = ArrayUtils.add(addressExclusions,key2);
+
+                    // Three occurrences found
+                    if(++count==4){
+                        for(int i=0; i<currentNumOptions.length; i++){
+//                            System.out.printf("removing %d from row %d\n", currentNumOptions[i], rowNum);
+                            removeFromRow(numOptionsToMatch[i], rowNum, addressExclusions);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void nakedQuarupleColumns(){
+        String address;
+        for(int colNum=1; colNum<=9; colNum++){
+
+            // HashMap needed to store the address that goes with each set of number options; HashMap<Address, Number options>
+            HashMap<String, Integer[]> addressAndNumOptions = new HashMap<>();
+            for(int rowNum=1; rowNum<=9; rowNum++){
+
+                // Skip already solved numbers
+                if(puzzleNums[rowNum-1][colNum-1] != 0) continue;
+
+                // Add to HashMap
+                address = ""+rowNum+""+colNum;
+                addressAndNumOptions.put(address, cells.get(address).getOptions());
+            }
+
+            // Search for instances of 3 of the same number options
+            Integer[] numOptionsToMatch;
+            for(String key: addressAndNumOptions.keySet()){
+
+                // Searching for cells with only 3 number options
+                numOptionsToMatch = addressAndNumOptions.get(key);
+                if(numOptionsToMatch.length != 4) continue;
+//                System.out.println("Numbers to search for");
+//                System.out.println(Arrays.toString(numOptionsToMatch));
+
+                // Loop through the entire list again for matching number options
+                int count = 0;
+                Integer[] currentNumOptions;
+                String[] addressExclusions = new String[]{};
+                outer:
+                for(String key2: addressAndNumOptions.keySet()){
+                    currentNumOptions = addressAndNumOptions.get(key2);
+//                    System.out.println(Arrays.toString(currentNumOptions));
+
+                    // Match found
+                    for(int i=0; i<currentNumOptions.length; i++){
+//                        System.out.printf("%d exists in %s %s\n", currentNumOptions[i], Arrays.toString(numOptionsToMatch), ArrayUtils.contains(numOptionsToMatch, currentNumOptions[i]));
+                        if(! ArrayUtils.contains(numOptionsToMatch, currentNumOptions[i])){
+//                            System.out.println("Not a match");
+                            continue outer;
+                        }
+                    }
+
+                    // Track matching cell addresses
+                    addressExclusions = ArrayUtils.add(addressExclusions,key2);
+
+                    // Three occurrences found
+                    if(++count==4){
+                        for(int i=0; i<currentNumOptions.length; i++){
+//                            System.out.printf("removing %d from column %d\n", currentNumOptions[i], colNum);
+                            removeFromCol(numOptionsToMatch[i], colNum, addressExclusions);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void nakedQuadrupleGrids(){
+        String address;
+        for(int gridNum=1; gridNum<=9; gridNum++){
+
+            // Retrieve grid addresses
+            Integer[][] gridMinMaxAddresses = getGridHashMap().get(gridNum);
+            int rowMin = gridMinMaxAddresses[0][0];
+            int rowMax = gridMinMaxAddresses[0][1];
+            int colMin = gridMinMaxAddresses[1][0];
+            int colMax = gridMinMaxAddresses[1][1];
+
+
+            // HashMap needed to store the address that goes with each set of number options; HashMap<Address, Number options>
+            HashMap<String, Integer[]> addressAndNumOptions = new HashMap<>();
+            for(int rowNum=rowMin; rowNum<=rowMax; rowNum++){
+                for(int colNum=colMin; colNum<=colMax; colNum++) {
+
+                    // Skip already solved numbers
+                    if (puzzleNums[rowNum - 1][colNum - 1] != 0) continue;
+
+                    // Add to HashMap
+                    address = "" + rowNum + "" + colNum;
+                    addressAndNumOptions.put(address, cells.get(address).getOptions());
+                }
+            }
+
+
+            // Search for instances of 3 of the same number options
+            Integer[] numOptionsToMatch;
+            for(String key: addressAndNumOptions.keySet()){
+
+                // Searching for cells with only 3 number options
+                numOptionsToMatch = addressAndNumOptions.get(key);
+                if(numOptionsToMatch.length != 4) continue;
+//                System.out.println("Numbers to search for");
+//                System.out.println(Arrays.toString(numOptionsToMatch));
+
+                // Loop through the entire list again for matching number options
+                int count = 0;
+                Integer[] currentNumOptions;
+                String[] addressExclusions = new String[]{};
+                outer:
+                for(String key2: addressAndNumOptions.keySet()){
+                    currentNumOptions = addressAndNumOptions.get(key2);
+//                    System.out.println(Arrays.toString(currentNumOptions));
+
+                    // Match found
+                    for(int i=0; i<currentNumOptions.length; i++){
+//                        System.out.printf("%d exists in %s %s\n", currentNumOptions[i], Arrays.toString(numOptionsToMatch), ArrayUtils.contains(numOptionsToMatch, currentNumOptions[i]));
+                        if(! ArrayUtils.contains(numOptionsToMatch, currentNumOptions[i])){
+//                            System.out.println("Not a match");
+                            continue outer;
+                        }
+                    }
+
+                    // Track matching cell addresses
+                    addressExclusions = ArrayUtils.add(addressExclusions,key2);
+
+                    // Three occurrences found
+                    if(++count==4){
+                        for(int i=0; i<currentNumOptions.length; i++){
+//                            System.out.printf("removing %d from grid %d\n", currentNumOptions[i], gridNum);
+                            removeFromGrid(numOptionsToMatch[i], gridNum, addressExclusions);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     public void nakedTripleRows(){
         String address;
@@ -527,7 +717,7 @@ public class Board{
     /**
      *  X-Wing sudoku strategy is an advanced solving technique - look online for details
      */
-    public void xWingStrategy(){
+    public void xWingStrategy() {
 
         // 5 because the other cells will reference other board locations that are 4 removed
         for(int row=1; row<=6; row++){
