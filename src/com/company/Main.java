@@ -71,6 +71,7 @@ public class Main {
                 {0,3,6,0,0,5,0,0,2},
                 {8,0,0,1,9,0,0,0,0},
         };
+
         Board board = new Board(boardNums_test1);
         board.solve();
      }
