@@ -72,7 +72,7 @@ public class Main {
                 {8,0,0,1,9,0,0,0,0},
         };
 
-        Board board = new Board(boardNums_test1);
+        Board board = new Board(boardNums_expert);
         board.solve();
      }
 }

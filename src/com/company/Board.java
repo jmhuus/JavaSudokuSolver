@@ -67,13 +67,14 @@ public class Board{
             for (int i = 0; i < 50; i++) {
                 nakedQuadrupleRows();
                 nakedQuarupleColumns();
-                nakedQuadrupleGrids();  
+                nakedQuadrupleGrids();
                 nakedTripleRows();
                 nakedTripleColumns();
                 nakedTripleGrids();
                 nakedPairRows();
                 nakedPairCols();
                 nakedPairGrids();
+                xWingStrategy();
             }
 
             // Update the board to include solutions
@@ -755,7 +756,6 @@ public class Board{
                 int numCount = 0;
                 int currentNum = allNumOptions[0];
                 for(int i=1; i<allNumOptions.length; i++){
-                    int random = allNumOptions[i];
                     if(currentNum == allNumOptions[i]){
 
                         // Four of the same number option were found; four numbers found == three consecutive matches
@@ -765,6 +765,8 @@ public class Board{
                             String addressesToExclude[] = new String[]{topLeftAddress, topRightAddress, bottomLeftAddress, bottomRightAddress};
                             removeFromRow(currentNum, row, addressesToExclude);
                             removeFromRow(currentNum, row+3, addressesToExclude);
+//                            removeFromCol(currentNum, col, addressesToExclude);
+//                            removeFromCol(currentNum, col+3, addressesToExclude);
                         }
                     }else{
                         currentNum = allNumOptions[i];
