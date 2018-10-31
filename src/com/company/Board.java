@@ -53,10 +53,11 @@ public class Board {
 
         // Validate rows
         for(int row=0; row<9; row++){
-            Integer[] sorted = puzzleNums[row];
+
+            Integer[] sorted = new Integer[puzzleNums[row].length];
+            System.arraycopy(puzzleNums[row], 0 , sorted,0, puzzleNums[row].length);
             Arrays.sort(sorted);
             sorted = ArrayUtils.removeAllOccurences(sorted, 0);
-            System.out.println(Arrays.toString(sorted));
             for(int i=1; i<=sorted.length; i++){
                 if(ArrayUtils.contains(sorted, i)){
                     if(ArrayUtils.indexOf(sorted, i) != ArrayUtils.lastIndexOf(sorted, i)){
@@ -72,11 +73,9 @@ public class Board {
         for(int column=0; column<9; column++){
             int[] sorted = new int[]{};
             for(int row=0; row<9; row++) {
-                System.out.printf("row %d column %d  = %d\n", row, column, puzzleNums[row][column]);
                 sorted = ArrayUtils.add(sorted, puzzleNums[row][column]);
             }
 
-            System.out.println(Arrays.toString(sorted));
             Arrays.sort(sorted);
             sorted = ArrayUtils.removeAllOccurences(sorted, 0);
             for(int i=1; i<=sorted.length; i++){
@@ -125,15 +124,15 @@ public class Board {
     private HashMap<Integer, Integer[][]> getGridHashMap(){
         // Key=Grid Index     Value = [rowNum range][colNum range]
         HashMap<Integer, Integer[][]> gridMap = new HashMap<>();
-        gridMap.put(1, new Integer[][]{{1,3},{1,3}});
-        gridMap.put(2, new Integer[][]{{1,3},{4,6}});
-        gridMap.put(3, new Integer[][]{{1,3},{7,9}});
-        gridMap.put(4, new Integer[][]{{4,6},{1,3}});
-        gridMap.put(5, new Integer[][]{{4,6},{4,6}});
-        gridMap.put(6, new Integer[][]{{4,6},{7,9}});
-        gridMap.put(7, new Integer[][]{{7,9},{1,3}});
-        gridMap.put(8, new Integer[][]{{7,9},{4,6}});
-        gridMap.put(9, new Integer[][]{{7,9},{7,9}});
+        gridMap.put(1, new Integer[][]{{0,2},{0,2}});
+        gridMap.put(2, new Integer[][]{{0,2},{3,5}});
+        gridMap.put(3, new Integer[][]{{0,2},{6,8}});
+        gridMap.put(4, new Integer[][]{{3,5},{0,2}});
+        gridMap.put(5, new Integer[][]{{3,5},{3,5}});
+        gridMap.put(6, new Integer[][]{{3,5},{6,8}});
+        gridMap.put(7, new Integer[][]{{6,8},{0,2}});
+        gridMap.put(8, new Integer[][]{{6,8},{3,5}});
+        gridMap.put(9, new Integer[][]{{6,8},{6,8}});
 
         return gridMap;
     }
