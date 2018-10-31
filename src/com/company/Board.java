@@ -45,7 +45,10 @@ public class Board {
 
 
     public void solve() {
-        System.out.println(validateBoard());
+
+    }
+
+    public boolean isSolution(int row, int col){
 
     }
 
