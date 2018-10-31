@@ -2,8 +2,8 @@ package com.company;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class Board {
 
@@ -46,33 +46,47 @@ public class Board {
 
     public void solve() {
 
-        // DFS
+        validateBoard();
 
     }
 
-    // A function used by DFS
-    void DFSUtil(int v, boolean visited[]) {
-        // Mark the current node as visited and print it
-        visited[v] = true;
-        System.out.print(v + " ");
+    public boolean validateBoard(){
 
-        // Recur for all the vertices adjacent to this vertex
-        Iterator<Integer> i = adj[v].listIterator();
-        while (i.hasNext()) {
-            int n = i.next();
-            if (!visited[n])
-                DFSUtil(n, visited);
+        // Validate rows
+        for(int row=0; row<9; row++){
+            Integer[] sorted = puzzleNums[row];
+            Arrays.sort(sorted);
+            sorted = ArrayUtils.removeAllOccurences(sorted, 0);
+            for(int i=1; i<=9; i++){
+                if(ArrayUtils.contains(sorted, i)){
+                    if(ArrayUtils.indexOf(sorted, i) != ArrayUtils.lastIndexOf(sorted, i)){
+                        return false;
+                    }
+                }
+            }
         }
-    }
 
-    // The function to do DFS traversal. It uses recursive DFSUtil()
-    void DFS(int v) {
-        // Mark all the vertices as not visited(set as
-        // false by default in java)
-        boolean visited[] = new boolean[V];
+        // Validate columns
+        for(int column=0; column<9; column++){
+            int[] sorted = new int[]{};
+            for(int row=0; row<9; row++) {
+                sorted = ArrayUtils.add(sorted, puzzleNums[row][column]);
+            }
+            Arrays.sort(sorted);
+            sorted = ArrayUtils.removeAllOccurences(sorted, 0);
+            for(int i=1; i<=9; i++){
+                if(ArrayUtils.contains(sorted, i)){
+                    if(ArrayUtils.indexOf(sorted, i) != ArrayUtils.lastIndexOf(sorted, i)){
+                        return false;
+                    }
+                }
+            }
+        }
 
-        // Call the recursive helper function to print DFS traversal
-        DFSUtil(v, visited);
+        // Validate grids
+        
+
+        return true;
     }
 }
 
