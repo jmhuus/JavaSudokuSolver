@@ -49,7 +49,35 @@ public class Board {
     }
 
     public boolean isSolution(int row, int col){
+        if(validateBoard()){
+            return true;
+        }
 
+        for(int potentialSolution=1; potentialSolution<=9; potentialSolution++){
+            HashMap<String, Integer> nextAddress = getNextAvailableAddress(row, col);
+            puzzleNums[nextAddress.get("row")][nextAddress.get("column")] = potentialSolution;
+            if(isSolution(nextAddress[0], nextAddress[1])){
+                return true;
+            }
+        }
+
+
+    }
+
+
+    public HashMap<String, Integer> getNextAvailableAddress(int currentRow, int currentCol){
+        HashMap<String, Integer> nextAddress = new HashMap<>();
+
+        for(int row=(currentRow-1); row<9; row++){
+            for(int col=(currentCol-1); col<9; col++){
+                if(puzzleNums[row][col]==0){
+                    nextAddress.put("row", row);
+                    nextAddress.put("column", col);
+                }
+            }
+        }
+
+        return new HashMap<>();
     }
 
     public boolean validateBoard(){
