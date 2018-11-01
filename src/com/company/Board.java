@@ -45,38 +45,70 @@ public class Board {
 
 
     public void solve() {
-
+        for(int i=1; i<=9; i++){
+            if(isSolution(0,1,i)){
+                break;
+            }
+        }
     }
 
-    public boolean isSolution(int row, int col){
-        if(validateBoard()){
-            return true;
+    public boolean isSolution(int row, int col, int solution){
+
+        puzzleNums[row][col] = solution;
+        if(!validateBoard()){
+            puzzleNums[row][col] = 0;
+            return false;
         }
 
         for(int potentialSolution=1; potentialSolution<=9; potentialSolution++){
             HashMap<String, Integer> nextAddress = getNextAvailableAddress(row, col);
-            puzzleNums[nextAddress.get("row")][nextAddress.get("column")] = potentialSolution;
-            if(isSolution(nextAddress[0], nextAddress[1])){
+
+            if(isSolution(nextAddress.get("row"), nextAddress.get("column"), potentialSolution)){
                 return true;
             }
         }
 
-
+        return true;
     }
 
 
+    // TODO: refactor into a linked existing linkedList of unsolved cells
     public HashMap<String, Integer> getNextAvailableAddress(int currentRow, int currentCol){
         HashMap<String, Integer> nextAddress = new HashMap<>();
 
-        for(int row=(currentRow-1); row<9; row++){
-            for(int col=(currentCol-1); col<9; col++){
-                if(puzzleNums[row][col]==0){
-                    nextAddress.put("row", row);
-                    nextAddress.put("column", col);
+        // Next position from what was passed
+        int row;
+        int col;
+        if(currentCol==8){
+            col = 0;
+            row = ++currentRow;
+        }else{
+            col = ++currentCol;
+            row = currentRow;
+        }
+
+        // "Snake" through each row until an unsolved address is found
+        while(true){
+            if(puzzleNums[row][col] == 0){
+                nextAddress.put("row", row);
+                nextAddress.put("column", col);
+                return nextAddress;
+            }else{
+                if(col==8){
+                    col = 0;
+                    row++;
+                }else{
+                    col++;
                 }
+            }
+
+            // Exit condition
+            if(row==8 && col==8){
+                break;
             }
         }
 
+        // Return blank if non found
         return new HashMap<>();
     }
 
