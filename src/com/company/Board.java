@@ -46,7 +46,7 @@ public class Board {
 
     public void solve() {
         for(int i=1; i<=9; i++){
-            if(isSolution(0,1,i)){
+            if(isSolution(0,0,i)){
                 break;
             }
         }
@@ -62,13 +62,31 @@ public class Board {
 
         for(int potentialSolution=1; potentialSolution<=9; potentialSolution++){
             HashMap<String, Integer> nextAddress = getNextAvailableAddress(row, col);
+//            System.out.printf("potential solution: %d  row: %s   column: %s\n", potentialSolution, nextAddress.get("row"), nextAddress.get("column"));
 
             if(isSolution(nextAddress.get("row"), nextAddress.get("column"), potentialSolution)){
                 return true;
             }
         }
 
-        return true;
+        puzzleNums[row][col] = 0;
+
+        System.out.println(toString());
+
+        return false;
+    }
+
+    public double percentSolved(){
+        int count=0;
+        for(int row=0; row<9; row++){
+            for(int col=0; col<9; col++){
+                if(puzzleNums[row][col] != 0){
+                    count++;
+                }
+            }
+        }
+
+        return (double)count/81;
     }
 
 
@@ -129,8 +147,6 @@ public class Board {
                 }
             }
         }
-
-        System.out.println(toString());
 
         // Validate columns
         for(int column=0; column<9; column++){
