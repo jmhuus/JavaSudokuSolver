@@ -45,8 +45,10 @@ public class Board {
 
 
     public void solve() {
+        System.out.println(toString());
+
         for(int i=1; i<=9; i++){
-            if(isSolution(0,0,i)){
+            if(isSolution(0,1,i)){
                 break;
             }
         }
@@ -59,6 +61,8 @@ public class Board {
             puzzleNums[row][col] = 0;
             return false;
         }
+
+        System.out.println(toString());
 
         for(int potentialSolution=1; potentialSolution<=9; potentialSolution++){
             HashMap<String, Integer> nextAddress = getNextAvailableAddress(row, col);
@@ -186,9 +190,9 @@ public class Board {
 
             Arrays.sort(sorted);
             sorted = ArrayUtils.removeAllOccurences(sorted, 0);
-            for(int x=0; x<sorted.length; x++){
-                if(ArrayUtils.contains(sorted, i)){
-                    if(ArrayUtils.indexOf(sorted, i) != ArrayUtils.lastIndexOf(sorted, i)){
+            for(int x=1; x<=9; x++){
+                if(ArrayUtils.contains(sorted, x)){
+                    if(ArrayUtils.indexOf(sorted, x) != ArrayUtils.lastIndexOf(sorted, x)){
                         return false;
                     }
                 }
