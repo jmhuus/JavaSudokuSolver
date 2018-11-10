@@ -12,8 +12,7 @@ public class Board {
 
 
     /**
-     * Construct a Board object in order to store and solve the array of Cell objects
-     *
+     * Construct a Board object in order to store and solve the array of Cell objects.
      * @param puzzle int[][] puzzle array; [row][column]; zero equals blank
      */
     public Board(Integer[][] puzzle) {
@@ -25,8 +24,7 @@ public class Board {
 
 
     /**
-     * Print the Sudoku board
-     *
+     * Print the Sudoku board.
      * @return string representation of the Sudoku board
      */
     @Override
@@ -44,9 +42,10 @@ public class Board {
     }
 
 
+    /**
+     *  Begins recursion solving by calling isSolution()
+     */
     public void solve() {
-        System.out.println(toString());
-
         for(int i=1; i<=9; i++){
             if(isSolution(0,1,i)){
                 break;
@@ -54,47 +53,51 @@ public class Board {
         }
     }
 
+
+    /**
+     * Recursion function used to solve the puzzle.
+     * @param row location used to place another potential solution
+     * @param col location used to place another potential solution
+     * @param solution potential solution to be placed and tested for validity
+     * @return true if the provided solution and all subsequent solutions are valid
+     */
     public boolean isSolution(int row, int col, int solution){
 
+        // New solution placement
         puzzleNums[row][col] = solution;
+
+        // Invalid placement?
         if(!validateBoard()){
             puzzleNums[row][col] = 0;
             return false;
         }
 
-        System.out.println(toString());
-
+        // New placement valid for the rest of the board
         for(int potentialSolution=1; potentialSolution<=9; potentialSolution++){
-            HashMap<String, Integer> nextAddress = getNextAvailableAddress(row, col);
-//            System.out.printf("potential solution: %d  row: %s   column: %s\n", potentialSolution, nextAddress.get("row"), nextAddress.get("column"));
 
+            HashMap<String, Integer> nextAddress = getNextAvailableAddress(row, col);
+
+            // Board must be solved; there is no next address
+            if(nextAddress.size()==0){return true;}
+
+            // Recurse
             if(isSolution(nextAddress.get("row"), nextAddress.get("column"), potentialSolution)){
                 return true;
             }
         }
 
+        // No valid subsequent placements found in the next available address
         puzzleNums[row][col] = 0;
-
-        System.out.println(toString());
-
         return false;
     }
 
-    public double percentSolved(){
-        int count=0;
-        for(int row=0; row<9; row++){
-            for(int col=0; col<9; col++){
-                if(puzzleNums[row][col] != 0){
-                    count++;
-                }
-            }
-        }
 
-        return (double)count/81;
-    }
-
-
-    // TODO: refactor into a linked existing linkedList of unsolved cells
+    /**
+     * Used to find the next cell available to be solved
+     * @param currentRow
+     * @param currentCol
+     * @return
+     */
     public HashMap<String, Integer> getNextAvailableAddress(int currentRow, int currentCol){
         HashMap<String, Integer> nextAddress = new HashMap<>();
 
@@ -116,17 +119,14 @@ public class Board {
                 nextAddress.put("column", col);
                 return nextAddress;
             }else{
-                if(col==8){
+                if(row==8 && col==8) {
+                    break;
+                }else if(col==8){
                     col = 0;
                     row++;
                 }else{
                     col++;
                 }
-            }
-
-            // Exit condition
-            if(row==8 && col==8){
-                break;
             }
         }
 
@@ -134,13 +134,22 @@ public class Board {
         return new HashMap<>();
     }
 
+
+    /**
+     * Ensures that an incorrect number hasn't been placed in a row, column, or grid.
+     * @return true if each grid, row, and column on entire board is valid - not
+     *         necessarily completely filled.
+     */
     public boolean validateBoard(){
 
         // Validate rows
         for(int row=0; row<9; row++){
 
+            // Retrieve row copy
             Integer[] sorted = new Integer[puzzleNums[row].length];
             System.arraycopy(puzzleNums[row], 0 , sorted,0, puzzleNums[row].length);
+
+            // Ensure unique elements, otherwise invalid
             Arrays.sort(sorted);
             sorted = ArrayUtils.removeAllOccurences(sorted, 0);
             for(int i=1; i<=sorted.length; i++){
@@ -159,6 +168,7 @@ public class Board {
                 sorted = ArrayUtils.add(sorted, puzzleNums[row][column]);
             }
 
+            // Ensure unique elements, otherwise invalid
             Arrays.sort(sorted);
             sorted = ArrayUtils.removeAllOccurences(sorted, 0);
             for(int i=1; i<=sorted.length; i++){
@@ -179,7 +189,6 @@ public class Board {
             int colMin = addressMinMax[1][0];
             int colMax = addressMinMax[1][1];
 
-
             // Build array from grid
             int[] sorted = new int[]{};
             for(int row=rowMin; row<=rowMax; row++){
@@ -188,6 +197,8 @@ public class Board {
                 }
             }
 
+
+            // Ensure unique elements, otherwise invalid
             Arrays.sort(sorted);
             sorted = ArrayUtils.removeAllOccurences(sorted, 0);
             for(int x=1; x<=9; x++){
@@ -204,6 +215,13 @@ public class Board {
     }
 
 
+    /**
+     * Addresses to each grid
+     * <Integer, >    =>    grid index position (top left == 1, top right == 3)
+     * <, Integer>    =>    {{min row, max row},{min column, ma column}}
+     * @return HashMap of a grid's min/max columns/rows;
+     *
+     */
     private HashMap<Integer, Integer[][]> getGridHashMap(){
         // Key=Grid Index     Value = [rowNum range][colNum range]
         HashMap<Integer, Integer[][]> gridMap = new HashMap<>();
