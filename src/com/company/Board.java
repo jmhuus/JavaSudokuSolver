@@ -136,8 +136,8 @@ public class Board {
 
 
     /**
-     * Ensures that an incorrect number hasn't been placed in a row, column, or grid.
-     * @return true if each grid, row, and column on entire board is valid - not
+     * Ensures that an incorrect number hasn't been placed in a row, column, or buttonsGrid.
+     * @return true if each buttonsGrid, row, and column on entire board is valid - not
      *         necessarily completely filled.
      */
     public boolean validateBoard(){
@@ -189,7 +189,7 @@ public class Board {
             int colMin = addressMinMax[1][0];
             int colMax = addressMinMax[1][1];
 
-            // Build array from grid
+            // Build array from buttonsGrid
             int[] sorted = new int[]{};
             for(int row=rowMin; row<=rowMax; row++){
                 for(int col=colMin; col<=colMax; col++){
@@ -216,10 +216,10 @@ public class Board {
 
 
     /**
-     * Addresses to each grid
-     * <Integer, >    =>    grid index position (top left == 1, top right == 3)
+     * Addresses to each buttonsGrid
+     * <Integer, >    =>    buttonsGrid index position (top left == 1, top right == 3)
      * <, Integer>    =>    {{min row, max row},{min column, ma column}}
-     * @return HashMap of a grid's min/max columns/rows;
+     * @return HashMap of a buttonsGrid's min/max columns/rows;
      *
      */
     private HashMap<Integer, Integer[][]> getGridHashMap(){
