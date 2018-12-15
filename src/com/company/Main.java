@@ -1,88 +1,61 @@
 package com.company;
 
-import org.apache.commons.lang3.ArrayUtils;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+public class Main extends Application {
 
-public class Main {
+    @Override
+    public void start(Stage primaryStage) {
+
+        // Buttons
+        Button btnSolve = new Button();
+        btnSolve.setText("Solve");
+        Button btnReset = new Button();
+        btnReset.setText("Reset");
+        Button btnClose = new Button();
+        btnClose.setText("Close");
+        btnSolve.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            }
+        });
+        btnReset.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            }
+        });
+        btnClose.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            }
+        });
+        
+
+        // Stackpane
+        HBox root = new HBox(8);
+        root.getChildren().add(btnSolve);
+        root.getChildren().add(btnReset);
+        root.getChildren().add(btnClose);
+
+
+        // Init window
+        Scene scene = new Scene(root, 300, 250);
+        primaryStage.setTitle("Hello World!");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
 
     public static void main(String[] args) {
-        // [row][column]
-        Integer[][] boardNums_throwAway = {
-                {5,0,0,9,0,0,0,2,7},
-                {0,0,0,5,0,0,1,0,4},
-                {0,0,7,1,2,3,0,0,8},
-                {0,0,6,0,0,4,0,0,2},
-                {4,8,0,0,0,0,0,1,6},
-                {9,0,0,6,0,0,5,0,0},
-                {7,0,0,3,9,5,2,0,9},
-                {8,0,9,0,0,6,0,0,9},
-                {1,5,0,0,0,2,0,0,9},
-        };
-
-        Integer[][] boardNums_medium = {
-                {5,0,0,9,0,0,0,2,7},
-                {0,0,0,5,0,0,1,0,4},
-                {0,0,7,1,2,3,0,0,8},
-                {0,0,6,0,0,4,0,0,2},
-                {4,8,0,0,0,0,0,1,6},
-                {9,0,0,6,0,0,5,0,0},
-                {7,0,0,3,9,5,2,0,0},
-                {8,0,9,0,0,6,0,0,0},
-                {1,5,0,0,0,2,0,0,9},
-        };
-
-        Integer[][] boardNums_hard = {
-                {5,0,0,9,0,0,0,2,7},
-                {0,0,0,5,0,0,1,0,4},
-                {0,0,7,1,2,3,0,0,8},
-                {0,0,6,0,0,4,0,0,2},
-                {4,8,0,0,0,0,0,1,6},
-                {9,0,0,6,0,0,5,0,0},
-                {7,0,0,3,9,5,2,0,0},
-                {8,0,9,0,0,6,0,0,0},
-                {1,5,0,0,0,2,0,0,9},
-        };
-
-        Integer[][] boardNums_expert = {
-                {2,0,0,1,9,0,0,8,0},
-                {0,4,0,0,3,0,0,0,6},
-                {0,0,0,2,7,0,5,0,0},
-                {0,0,9,0,0,0,0,6,0},
-                {0,0,5,0,6,9,0,0,0},
-                {4,0,0,0,1,0,0,9,0},
-                {7,0,4,0,0,0,0,0,3},
-                {1,2,0,0,0,0,8,0,0},
-                {0,0,0,0,0,0,0,0,2},
-        };
-
-        Integer[][] boardNums_test1 = {
-                {0,5,0,6,0,3,0,0,0},
-                {0,8,0,0,0,0,9,4,0},
-                {0,0,0,0,0,0,1,0,0},
-                {0,0,8,0,0,0,4,7,0},
-                {0,7,0,0,2,9,0,0,0},
-                {0,0,5,3,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,4},
-                {0,3,6,0,0,5,0,0,2},
-                {8,0,0,1,9,0,0,0,0},
-        };
-
-        Board board = new Board(boardNums_expert);
-        board.solve();
-
-        System.out.println(board.toString());
-     }
+        launch(args);
+    }
 }
-
-
-
-
-
 
 
 
